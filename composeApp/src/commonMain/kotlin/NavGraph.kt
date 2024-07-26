@@ -7,7 +7,9 @@ import androidx.navigation.compose.rememberNavController
 fun Navigation(){
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "screen1") {
-        composable("screen1") { HomeScreen(navController) }
-        composable("screen2") { LabTest(navController) }
+        composable("screen1") { App(navController) }
+        composable("screen2") { HomeScreen(navController) }
+        composable("screen3") { LabTest(navController) }
+        composable("screen4") {UserDetails(navController)}
     }
 }

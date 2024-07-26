@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.BottomNavigation
@@ -29,6 +30,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.darkColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Home
@@ -41,6 +43,7 @@ import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.lightColors
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,109 +69,129 @@ import androidx.navigation.compose.rememberNavController
 
 fun HomeScreen(navController: NavHostController) {
         MaterialTheme(
-        colors = lightColors(
-            background = AppColors.SoftBlue
-        )
+            lightColors(
+                background = AppColors.Background
+
+            )
     ) {
 
         Surface(
             color = MaterialTheme.colors.background
         ) {
             val searchText = remember { mutableStateOf(TextFieldValue("")) }
+            val selectedNav = remember { mutableStateOf(0) }
+
+            Box(modifier = Modifier.fillMaxSize()) {
+                Column {
 
 
-            Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
 
-                Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
+                        Image(
+                            painterResource(Res.drawable.logo),
+                            contentDescription = null,
+                            modifier = Modifier.padding(10.dp)
+                        )
+                        Text(
+                            text = "AanandSeva",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 25.sp,
+                            modifier = Modifier.padding(5.dp).align(Alignment.CenterVertically)
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(
+                            imageVector = Icons.Outlined.Notifications,
+                            contentDescription = null,
+                            modifier = Modifier.size(50.dp).padding(vertical = 5.dp)
+                        )
 
-                    Image(painterResource(Res.drawable.logo), contentDescription = null,modifier = Modifier.padding(10.dp))
-                    Text(
-                        text = "AanandSeva",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 25.sp,
-                        modifier = Modifier.padding(5.dp).align(Alignment.CenterVertically)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Icon(imageVector = Icons.Outlined.Notifications, contentDescription = null, modifier = Modifier.size(50.dp).padding(vertical = 5.dp))
-                }
+                    }
 
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .shadow(10.dp)
-                        .size(50.dp)
-                        .background(Color.White, shape = RoundedCornerShape(10.dp))
-                    ,
-                    value = searchText.value,
-                    onValueChange = { searchText.value = it },
-                    shape = RoundedCornerShape(10.dp),
-                    label = { Text("Search for Medicines") },
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .shadow(10.dp)
+                            .size(50.dp),
+                        value = searchText.value,
+                        onValueChange = { searchText.value = it },
+                        shape = RoundedCornerShape(10.dp),
+                        label = { Text("Search for Medicines") },
 
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Default.Search, contentDescription = "Search Button")
-                    },
-                    trailingIcon = {
-                        if (searchText.value.text.isNotEmpty()) {
+                        leadingIcon = {
                             Icon(
-                                imageVector = Icons.Default.Clear,
-                                contentDescription = "Clear Button",
-                                modifier = Modifier.clickable {
-                                    searchText.value = TextFieldValue("")
-                                }
-
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Search Button"
                             )
+                        },
+                        trailingIcon = {
+                            if (searchText.value.text.isNotEmpty()) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = "Clear Button",
+                                    modifier = Modifier.clickable {
+                                        searchText.value = TextFieldValue("")
+                                    }
+
+                                )
+                            }
+                        },
+
+                        )
+
+
+                    LazyColumn (
+                        modifier = Modifier.size()
+                    ){
+                        items(10) { index ->
+                            BaseList(index)
                         }
-                    },
+                    }
 
-                    )
-
-
-
-                Spacer(modifier = Modifier.weight(1f))
-
-
-                //  Bottom Icons
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .size(50.dp)
-                        .background(Color.White),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom,
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Home,
-                        contentDescription = null,
-                        tint = Color.Gray, modifier = Modifier.size(40.dp).clickable(onClick = {
-
-                        })
-                    )
-                    Icon(
-                        imageVector = Icons.Outlined.Phone,
-                        contentDescription = null,
-                        tint = Color.Gray, modifier = Modifier.size(40.dp).clickable(onClick = {})
-                    )
-                    Image(
-                        painterResource(Res.drawable.flask),
-                        contentDescription = "Lab Test",
-                        modifier = Modifier.size(40.dp)
-                            .clickable(
-                                onClick = {navController.navigate("screen2")})
-                    )
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = null,
-                        tint = Color.Gray, modifier = Modifier.size(40.dp).clickable(onClick = {})
-                    )
+                    //  Bottom Icons
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .size(50.dp)
+                            .background(Color.White),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.Bottom,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Home,
+                            contentDescription = null,
+                            modifier = Modifier.size(40.dp).clickable(onClick = {
+                                selectedNav.value = 1
+                            }),
+                            tint = Color.Gray
+                        )
+                        Icon(
+                            imageVector = Icons.Outlined.Phone,
+                            contentDescription = null,
+                            tint = Color.Gray,
+                            modifier = Modifier.size(40.dp).clickable(onClick = {})
+                        )
+                        Image(
+                            painterResource(Res.drawable.flask),
+                            contentDescription = "Lab Test",
+                            modifier = Modifier.size(40.dp)
+                                .clickable(
+                                    onClick = { navController.navigate("screen3") })
+                        )
+                        Icon(
+                            imageVector = Icons.Outlined.Person,
+                            contentDescription = null,
+                            tint = Color.Gray,
+                            modifier = Modifier.size(40.dp).clickable(onClick = {})
+                        )
 
 
-
-
+                    }
 
                 }
-
-
             }
         }
     }

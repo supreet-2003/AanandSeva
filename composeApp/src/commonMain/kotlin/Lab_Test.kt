@@ -33,7 +33,7 @@ import org.jetbrains.compose.resources.vectorResource
 fun LabTest(navController: NavHostController) {
     MaterialTheme(
         colors = lightColors(
-            background = AppColors.SoftBlue
+            background = AppColors.Background
         )
     ) {
         Surface(

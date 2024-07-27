@@ -18,5 +18,6 @@ object AppColors {
     val OnSurface = Color(0xFF000000)
     val OnError = Color(0xFFFFFFFF)
     val SoftBlue = Color(0xFFAEC6CF)
+    val SoftPurple = Color(0xFF746AC2)
 
 }

@@ -114,12 +114,13 @@ fun HomeScreen(navController: NavHostController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp)
-                            .shadow(10.dp)
-                            .size(50.dp),
+//                            .shadow(10.dp)
+//                            .size(50.dp),
+                                ,
                         value = searchText.value,
                         onValueChange = { searchText.value = it },
                         shape = RoundedCornerShape(10.dp),
-                        label = { Text("Search for Medicines") },
+                        label = { Text("Search for Doctors") },
 
                         leadingIcon = {
                             Icon(
@@ -144,7 +145,7 @@ fun HomeScreen(navController: NavHostController) {
 
 
                     LazyColumn (
-                        modifier = Modifier.size()
+                        modifier = Modifier.fillMaxWidth()
                     ){
                         items(10) { index ->
                             BaseList(index)

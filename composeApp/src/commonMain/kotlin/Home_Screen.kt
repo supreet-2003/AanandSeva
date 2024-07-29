@@ -81,10 +81,13 @@ fun HomeScreen(navController: NavHostController) {
             val searchText = remember { mutableStateOf(TextFieldValue("")) }
             val selectedNav = remember { mutableStateOf(0) }
 
-            Box(modifier = Modifier.fillMaxSize()) {
-                Column {
 
-
+            Scaffold(
+                topBar = {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.SpaceAround
+                    ){
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -93,7 +96,7 @@ fun HomeScreen(navController: NavHostController) {
                         Image(
                             painterResource(Res.drawable.logo),
                             contentDescription = null,
-                            modifier = Modifier.padding(10.dp)
+                            modifier = Modifier.padding(top = 5.dp, start = 10.dp, end = 10.dp)
                         )
                         Text(
                             text = "AanandSeva",
@@ -113,13 +116,13 @@ fun HomeScreen(navController: NavHostController) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
+                            .padding(bottom = 10.dp, start = 5.dp, end = 5.dp)
 //                            .shadow(10.dp)
 //                            .size(50.dp),
                                 ,
                         value = searchText.value,
                         onValueChange = { searchText.value = it },
-                        shape = RoundedCornerShape(10.dp),
+                        shape = RoundedCornerShape(15.dp),
                         label = { Text("Search for Doctors") },
 
                         leadingIcon = {
@@ -142,24 +145,15 @@ fun HomeScreen(navController: NavHostController) {
                         },
 
                         )
-
-
-                    LazyColumn (
-                        modifier = Modifier.fillMaxWidth()
-                    ){
-                        items(10) { index ->
-                            BaseList(index)
-                        }
-                    }
-
-                    //  Bottom Icons
+                }},
+                bottomBar = {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .size(50.dp)
                             .background(Color.White),
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Bottom,
+                        verticalAlignment = Alignment.Bottom
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Home,
@@ -193,7 +187,129 @@ fun HomeScreen(navController: NavHostController) {
                     }
 
                 }
+            ){
+                paddingValues ->
+                LazyColumn (
+                        modifier = Modifier,
+                    ){
+                        items(10) { index ->
+                            BaseList(index)
+                        }
+                    }
             }
+
+//            Box(modifier = Modifier.fillMaxSize()) {
+////                Column {
+////
+////
+////                    Row(
+////                        modifier = Modifier.fillMaxWidth(),
+////                        horizontalArrangement = Arrangement.SpaceBetween
+////                    ) {
+////
+////                        Image(
+////                            painterResource(Res.drawable.logo),
+////                            contentDescription = null,
+////                            modifier = Modifier.padding(10.dp)
+////                        )
+////                        Text(
+////                            text = "AanandSeva",
+////                            fontWeight = FontWeight.Bold,
+////                            fontSize = 25.sp,
+////                            modifier = Modifier.padding(5.dp).align(Alignment.CenterVertically)
+////                        )
+////                        Spacer(modifier = Modifier.weight(1f))
+////                        Icon(
+////                            imageVector = Icons.Outlined.Notifications,
+////                            contentDescription = null,
+////                            modifier = Modifier.size(50.dp).padding(vertical = 5.dp)
+////                        )
+////
+////                    }
+////
+////                    OutlinedTextField(
+////                        modifier = Modifier
+////                            .fillMaxWidth()
+////                            .padding(16.dp)
+//////                            .shadow(10.dp)
+//////                            .size(50.dp),
+////                                ,
+////                        value = searchText.value,
+////                        onValueChange = { searchText.value = it },
+////                        shape = RoundedCornerShape(10.dp),
+////                        label = { Text("Search for Doctors") },
+////
+////                        leadingIcon = {
+////                            Icon(
+////                                imageVector = Icons.Default.Search,
+////                                contentDescription = "Search Button"
+////                            )
+////                        },
+////                        trailingIcon = {
+////                            if (searchText.value.text.isNotEmpty()) {
+////                                Icon(
+////                                    imageVector = Icons.Default.Clear,
+////                                    contentDescription = "Clear Button",
+////                                    modifier = Modifier.clickable {
+////                                        searchText.value = TextFieldValue("")
+////                                    }
+////
+////                                )
+////                            }
+////                        },
+////
+////                        )
+////
+////
+////                    LazyColumn (
+////                        modifier = Modifier,
+////                    ){
+////                        items(10) { index ->
+////                            BaseList(index)
+////                        }
+////                    }
+////                    //  Bottom Icons
+////                    Row(
+////                        modifier = Modifier
+////                            .fillMaxWidth()
+////                            .size(50.dp)
+////                            .background(Color.White),
+////                        horizontalArrangement = Arrangement.SpaceBetween,
+////                        verticalAlignment = Alignment.Bottom
+////                    ) {
+////                        Icon(
+////                            imageVector = Icons.Outlined.Home,
+////                            contentDescription = null,
+////                            modifier = Modifier.size(40.dp).clickable(onClick = {
+////                                selectedNav.value = 1
+////                            }),
+////                            tint = Color.Gray
+////                        )
+////                        Icon(
+////                            imageVector = Icons.Outlined.Phone,
+////                            contentDescription = null,
+////                            tint = Color.Gray,
+////                            modifier = Modifier.size(40.dp).clickable(onClick = {})
+////                        )
+////                        Image(
+////                            painterResource(Res.drawable.flask),
+////                            contentDescription = "Lab Test",
+////                            modifier = Modifier.size(40.dp)
+////                                .clickable(
+////                                    onClick = { navController.navigate("screen3") })
+////                        )
+////                        Icon(
+////                            imageVector = Icons.Outlined.Person,
+////                            contentDescription = null,
+////                            tint = Color.Gray,
+////                            modifier = Modifier.size(40.dp).clickable(onClick = {})
+////                        )
+////
+////
+////                    }
+////
+////                }
+////            }
         }
     }
 }

@@ -48,11 +48,13 @@ fun UserDetails(navController: NavHostController) {
                 Spacer(modifier = Modifier.padding(30.dp))
                 OutlinedTextField(value = username,
                     colors =TextFieldDefaults.outlinedTextFieldColors(
+
                     )
                     ,onValueChange = {
                     username = it
                 }, label = { Text(text = "Username") }, modifier = Modifier.align(Alignment.CenterHorizontally))
                 OutlinedTextField(value = age, onValueChange = {
+
                     age = it
                 }, label = { Text(text = "Age") },modifier = Modifier.align(Alignment.CenterHorizontally))
                 OutlinedTextField(value = bloodgrp, onValueChange = {

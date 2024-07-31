@@ -1,5 +1,6 @@
 import anandseva_kmp.composeapp.generated.resources.Res
 import anandseva_kmp.composeapp.generated.resources.flask
+import anandseva_kmp.composeapp.generated.resources.nophoto
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,7 +44,7 @@ fun BaseList(index:Int){
             verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(8.dp)
         ){
             Image(
-                painterResource(Res.drawable.flask),
+                painterResource(Res.drawable.nophoto),
                 contentDescription = "Lab Test",
                 modifier = Modifier.size(90.dp).padding(8.dp)
             )

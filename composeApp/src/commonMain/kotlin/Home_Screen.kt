@@ -2,6 +2,8 @@ import anandseva_kmp.composeapp.generated.resources.Res
 import anandseva_kmp.composeapp.generated.resources.flask
 import anandseva_kmp.composeapp.generated.resources.home
 import anandseva_kmp.composeapp.generated.resources.logo
+import anandseva_kmp.composeapp.generated.resources.medicine
+import anandseva_kmp.composeapp.generated.resources.nophoto
 import anandseva_kmp.composeapp.generated.resources.patient
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -116,7 +118,7 @@ fun HomeScreen(navController: NavHostController) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 10.dp, start = 5.dp, end = 5.dp)
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
 //                            .shadow(10.dp)
 //                            .size(50.dp),
                                 ,
@@ -163,11 +165,10 @@ fun HomeScreen(navController: NavHostController) {
                             }),
                             tint = Color.Gray
                         )
-                        Icon(
-                            imageVector = Icons.Outlined.Phone,
-                            contentDescription = null,
-                            tint = Color.Gray,
-                            modifier = Modifier.size(40.dp).clickable(onClick = {})
+                        Image( painterResource(Res.drawable.medicine), contentDescription = null,
+                            modifier = Modifier.size(40.dp).clickable(onClick = {
+                                navController.navigate("screen5")
+                            })
                         )
                         Image(
                             painterResource(Res.drawable.flask),
@@ -188,7 +189,6 @@ fun HomeScreen(navController: NavHostController) {
 
                 }
             ){
-                paddingValues ->
                 LazyColumn (
                         modifier = Modifier,
                     ){

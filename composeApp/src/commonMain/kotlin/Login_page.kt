@@ -4,10 +4,8 @@ import anandseva_kmp.composeapp.generated.resources.google
 import anandseva_kmp.composeapp.generated.resources.logo
 import anandseva_kmp.composeapp.generated.resources.twitter
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,15 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.lightColors
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,22 +24,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import androidx.navigation.NavHostController
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
 fun App(navController: NavHostController) {
+    val apiClient = remember { ApiClient() }
+    val coroutineScope = rememberCoroutineScope()
 
+     suspend fun performLogin(phone: String): Any? {
+        try {
+            val response = apiClient.login(phone)
+            println("Response: $response")
+            return response
+        } catch (e: Exception) {
+            println("Error: $e.message")
+            return {}
+        }
+    }
 
     var phone by remember {
-        mutableStateOf("")
-    }
-    var pass by remember {
         mutableStateOf("")
     }
     MaterialTheme(
@@ -95,9 +99,12 @@ fun App(navController: NavHostController) {
                     Text(text = "Login to Your Account",)
                     Spacer(modifier = Modifier.padding(5.dp))
 
-                    OutlinedTextField(value = phone, onValueChange = {
-                        phone = it
-                    }, label = { Text(text = "Enter Your Phone Number") })
+                    OutlinedTextField(
+                        value = phone,
+                        onValueChange = { phone = it },
+                        label = { Text(text = "Enter Your Phone Number") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                    )
                     Spacer(modifier = Modifier.padding(5.dp))
 //                    OutlinedTextField(
 //                        value = pass,
@@ -114,7 +121,23 @@ fun App(navController: NavHostController) {
                     Button(colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
                        , shape = RoundedCornerShape(10.dp),
                         onClick = {
-                            navController.navigate("screen4")
+                            coroutineScope.launch {
+                                val result = performLogin(phone)
+                                println("Result: $result")
+                                if (result.toString().contains(":false")) {
+                                    println("err $result")
+                                    //navigate to otp
+//                                    navController.navigate("screen2") // Navigate on successful login
+                                } else if (result.toString().contains("name")){
+                                    navController.navigate("screen2")
+                                } else {
+                                    println("Result id:$result")
+                                    val user = result.toString()
+                                    val id = phone
+                                    println("User$user")
+                                    navController.navigate("screen4/$id")
+                                }
+                            }
                         },
                     ) {
                         Text(text = "Login")

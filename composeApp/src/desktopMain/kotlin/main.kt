@@ -6,6 +6,6 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "Anandseva_kmp",
     ) {
-        App()
+
     }
 }

@@ -13,6 +13,10 @@ androidx-test-junit="1.2.0"
 compose-plugin="1.6.11"
 junit="4.13.2"
 kotlin="2.0.0"
+foundationAndroid = "1.6.8"
+uiTextAndroid = "1.6.8"
+navigationCommonKtx = "2.7.7"
+firebaseCrashlyticsBuildtools = "3.0.2"
 
 [libraries]
 kotlin-test={module="org.jetbrains.kotlin:kotlin-test",version.ref="kotlin"}
@@ -25,6 +29,10 @@ androidx-appcompat={group="androidx.appcompat",name="appcompat",version.ref="and
 androidx-material={group="com.google.android.material",name="material",version.ref="androidx-material"}
 androidx-constraintlayout={group="androidx.constraintlayout",name="constraintlayout",version.ref="androidx-constraintlayout"}
 androidx-activity-compose={module="androidx.activity:activity-compose",version.ref="androidx-activityCompose"}
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
+androidx-ui-text-android = { group = "androidx.compose.ui", name = "ui-text-android", version.ref = "uiTextAndroid" }
+androidx-navigation-common-ktx = { group = "androidx.navigation", name = "navigation-common-ktx", version.ref = "navigationCommonKtx" }
+firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 
 [plugins]
 androidApplication={id="com.android.application",version.ref="agp"}

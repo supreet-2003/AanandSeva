@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+
+    kotlin("plugin.serialization") version "1.8.0"
 }
 
 kotlin {
@@ -19,7 +21,7 @@ kotlin {
     }
     
     jvm("desktop")
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -37,6 +39,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation("io.ktor:ktor-client-android:2.0.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -49,9 +52,26 @@ kotlin {
             implementation(compose.material3)
             implementation("com.arkivanov.decompose:decompose:1.0.0")
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha07")
+
+            implementation("io.ktor:ktor-client-core:2.0.0")
+            implementation("io.ktor:ktor-client-json:2.0.0")
+            implementation("io.ktor:ktor-client-serialization:2.0.0")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+        }
+
+        iosMain {
+            dependencies {
+                implementation("io.ktor:ktor-client-ios:2.0.0")
+            }
+        }
+         jsMain  {
+            dependencies {
+                implementation("io.ktor:ktor-client-js:2.0.0")
+            }
         }
     }
 }
@@ -91,6 +111,11 @@ android {
     dependencies {
         debugImplementation(compose.uiTooling)
     }
+}
+dependencies {
+    implementation(libs.androidx.foundation.android)
+    implementation(libs.androidx.ui.text.android)
+    implementation(libs.androidx.navigation.common.ktx)
 }
 
 compose.desktop {

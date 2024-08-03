@@ -25,15 +25,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+
 
 @Composable
-fun UserDetails(navController: NavHostController) {
+fun UserDetails(navController: NavHostController,id: String) {
     var username by remember { mutableStateOf("") }
     var age by remember { mutableStateOf("") }
     var bloodgrp by remember { mutableStateOf("") }
     var gender by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
+    val apiClient = remember { ApiClient() }
 
+
+    suspend fun saveUserDetails(name:String,age:String,address:String,bloodgroup:String,gender:String): Any? {
+        try {
+            println("Id:$id")
+            val json = """{"name": "$name", "type": "User", "bloodgroup": "$bloodgroup", "address": "$address", "age": "$age", "gender": "$gender"}"""
+            val response = apiClient.saveUserDetails(json, id)
+            println("Response: $response")
+            return response
+        } catch (e: Exception) {
+            println("Error: $e.message")
+            return {}
+        }
+    }
     MaterialTheme(
         colors = lightColors(
             background = AppColors.Background
@@ -71,7 +89,12 @@ fun UserDetails(navController: NavHostController) {
                 Button(colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White),shape = RoundedCornerShape(8.dp), modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     ,onClick = {
-                    navController.navigate("screen2")
+                        coroutineScope.launch {
+                            val result = saveUserDetails(username,age,address,bloodgrp,gender)
+                            println("Result: $result")
+                            if(result.toString() !== null)
+                             navController.navigate("screen2")
+                        }
                 }){
                     Text(text="Save Your Details")
                 }

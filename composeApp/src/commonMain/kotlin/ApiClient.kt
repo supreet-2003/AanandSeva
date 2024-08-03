@@ -25,7 +25,7 @@ class ApiClient {
                 return responseBody
             } else {
                 println("Error: ${response.status}")
-                null
+                return null
             }
         } catch (e: Exception) {
             println("Error: ${e.message}")

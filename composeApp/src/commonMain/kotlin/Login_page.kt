@@ -124,18 +124,20 @@ fun App(navController: NavHostController) {
                             coroutineScope.launch {
                                 val result = performLogin(phone)
                                 println("Result: $result")
-                                if (result.toString().contains(":false")) {
-                                    println("err $result")
-                                    //navigate to otp
+                                if(result !== null){
+                                    if (result.toString().contains(":false")) {
+                                        println("err $result")
+                                        //navigate to otp
 //                                    navController.navigate("screen2") // Navigate on successful login
-                                } else if (result.toString().contains("name")){
-                                    navController.navigate("screen2")
-                                } else {
-                                    println("Result id:$result")
-                                    val user = result.toString()
-                                    val id = phone
-                                    println("User$user")
-                                    navController.navigate("screen4/$id")
+                                    } else if (result.toString().contains("name")){
+                                        navController.navigate("screen2")
+                                    } else {
+                                        println("Result id:$result")
+                                        val user = result.toString()
+                                        val id = phone
+                                        println("User$user")
+                                        navController.navigate("screen4/$id")
+                                    }
                                 }
                             }
                         },

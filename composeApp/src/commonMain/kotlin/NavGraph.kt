@@ -12,6 +12,6 @@ fun Navigation(){
         composable("screen3") { LabTest(navController) }
         composable("screen4") {UserDetails(navController)}
         composable("screen5") {MedScreen(navController)}
-
+//        composable("screen6") {MedPop(navController)}
     }
-}
+    }

@@ -92,7 +92,7 @@ fun UserDetails(navController: NavHostController,id: String) {
                         coroutineScope.launch {
                             val result = saveUserDetails(username,age,address,bloodgrp,gender)
                             println("Result: $result")
-                            if(result.toString() !== null)
+                            if(result !== null)
                              navController.navigate("screen2")
                         }
                 }){

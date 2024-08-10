@@ -116,6 +116,9 @@ dependencies {
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.ui.text.android)
     implementation(libs.androidx.navigation.common.ktx)
+    implementation(libs.androidx.runtime.android)
+    implementation(libs.gson)
+    implementation(libs.play.services.drive)
 }
 
 compose.desktop {

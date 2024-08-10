@@ -1,5 +1,6 @@
 // AliClient.kt
 import io.ktor.client.HttpClient
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.statement.HttpResponse
@@ -11,6 +12,8 @@ import io.ktor.http.contentType
 import io.ktor.util.InternalAPI
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class ApiClient {
     private val client = HttpClient()
@@ -50,6 +53,26 @@ class ApiClient {
             } else {
                 println("Error: ${response.status}")
                 null
+            }
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
+    }
+
+    suspend fun fetchAllDoctors(): List<Doctor>? {
+        return try {
+            val response: HttpResponse = client.get(url = Url("http://10.0.2.2:4000/doctors"))
+            if (response.status == HttpStatusCode.OK) {
+                val responseBody = response.bodyAsText()
+                println("Response Body: $responseBody")
+                val gson = Gson()
+                val itemType = object : TypeToken<List<Doctor>>() {}.type
+                val doctors: List<Doctor> = gson.fromJson(responseBody, itemType)
+                return doctors
+            } else {
+                println("Error: ${response.status}")
+                return null
             }
         } catch (e: Exception) {
             println("Error: ${e.message}")

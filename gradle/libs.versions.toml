@@ -11,14 +11,18 @@ androidx-espresso-core="3.6.0"
 androidx-material="1.12.0"
 androidx-test-junit="1.2.0"
 compose-plugin="1.6.11"
+gson="2.10.1"
 junit="4.13.2"
 kotlin="2.0.0"
 foundationAndroid = "1.6.8"
 uiTextAndroid = "1.6.8"
 navigationCommonKtx = "2.7.7"
 firebaseCrashlyticsBuildtools = "3.0.2"
+runtimeAndroid = "1.6.8"
+playServicesDrive = "17.0.0"
 
 [libraries]
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 kotlin-test={module="org.jetbrains.kotlin:kotlin-test",version.ref="kotlin"}
 kotlin-test-junit={module="org.jetbrains.kotlin:kotlin-test-junit",version.ref="kotlin"}
 junit={group="junit",name="junit",version.ref="junit"}
@@ -33,6 +37,8 @@ androidx-foundation-android = { group = "androidx.compose.foundation", name = "f
 androidx-ui-text-android = { group = "androidx.compose.ui", name = "ui-text-android", version.ref = "uiTextAndroid" }
 androidx-navigation-common-ktx = { group = "androidx.navigation", name = "navigation-common-ktx", version.ref = "navigationCommonKtx" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
+play-services-drive = { group = "com.google.android.gms", name = "play-services-drive", version.ref = "playServicesDrive" }
 
 [plugins]
 androidApplication={id="com.android.application",version.ref="agp"}

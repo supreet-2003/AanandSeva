@@ -19,6 +19,6 @@ fun Navigation(){
             UserDetails(navController,backStackEntry.arguments?.getString("id")!!)
         }
         composable("screen5") {MedScreen(navController)}
-
+//        composable("screen6") {MedPop(navController)}
     }
-}
+    }

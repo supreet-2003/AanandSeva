@@ -52,6 +52,13 @@ fun HomeScreen(navController: NavHostController) {
         }
     }
 
+    // Filtered list of doctors based on search text
+    val filteredDoctorsData = doctorsData?.filter { doctor ->
+        doctor.name.contains(searchText.text, ignoreCase = true) ||
+                doctor.specialization.contains(searchText.text) ||
+                doctor.clinicAddress.contains(searchText.text, ignoreCase = true)
+    }
+
     MaterialTheme(
         colors = lightColors(
             background = Color.White
@@ -156,8 +163,8 @@ fun HomeScreen(navController: NavHostController) {
                 }
             }
         ) { paddingValues ->
-            LazyColumn {
-                items(doctorsData ?: emptyList()) { doctor ->
+            LazyColumn(modifier = Modifier.padding(paddingValues)) {
+                items(filteredDoctorsData ?: emptyList()) { doctor ->
                     BaseList(doctor = doctor)
                 }
             }

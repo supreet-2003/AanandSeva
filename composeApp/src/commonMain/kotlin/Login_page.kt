@@ -41,12 +41,14 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
-fun App(navController: NavHostController) {
+fun App(navController: NavHostController,) {
 
 
     var phone by remember {
         mutableStateOf("")
     }
+//    OtpScreen(mob=phone, navController = navController)
+    var otpopen by remember { mutableStateOf(false) }
     var pass by remember {
         mutableStateOf("")
     }
@@ -66,7 +68,7 @@ fun App(navController: NavHostController) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(50.dp),
+                        .padding(40.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.Top,
                 ) {
@@ -76,10 +78,11 @@ fun App(navController: NavHostController) {
                         modifier = Modifier.size(70.dp)
                     )
                     Text(
+                        modifier = Modifier.fillMaxWidth().padding(10.dp),
                         text = "AanandSeva",
                         fontWeight = FontWeight.Bold,
                         fontSize = 35.sp,
-                        modifier = Modifier.padding(10.dp)
+
                     )
                 }
 
@@ -114,11 +117,15 @@ fun App(navController: NavHostController) {
                     Button(colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
                        , shape = RoundedCornerShape(10.dp),
                         onClick = {
-                            navController.navigate("screen4")
+                          otpopen=true
+//                            navController.navigate("screen7")
                         },
                     ) {
                         Text(text = "Login")
-
+                        if(otpopen){
+                            navController.navigate("screen7")
+//                            otpopen=false
+                        }
                     }
                     Spacer(modifier = Modifier.padding(10.dp))
                     Text(

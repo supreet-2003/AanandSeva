@@ -1,7 +1,9 @@
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 
 @Composable
 fun Navigation(){
@@ -13,5 +15,12 @@ fun Navigation(){
         composable("screen4") {UserDetails(navController)}
         composable("screen5") {MedScreen(navController)}
 //        composable("screen6") {MedPop(navController)}
+        composable("screen7") {OtpScreen(navController)}
+//        composable("screen7",
+//            arguments = listOf(navArgument("mob") { type = NavType.StringType })
+//        ) { backStackEntry ->
+//            val mob = backStackEntry.arguments?.getString("mob") ?: ""
+//            OtpScreen(navController=navController,mob = mob)
+//        }
     }
     }

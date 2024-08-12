@@ -62,16 +62,16 @@ import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun MedOrder(index:Int) {
+fun LabOrder(index:Int) {
 
 
 
-     Box(
-        modifier = Modifier.fillMaxWidth(),
+    Box(
+        modifier = Modifier.fillMaxSize(),
     ) {
         Card(
             elevation = 8.dp, modifier = Modifier
-                .fillMaxWidth().height(500.dp).padding(8.dp)
+                .fillMaxWidth().padding(8.dp).height(500.dp)
         ) {
 
             Column(modifier = Modifier.padding(8.dp)) {
@@ -83,7 +83,7 @@ fun MedOrder(index:Int) {
         }
     }
 //
-                }
+}
 
 
 
@@ -91,11 +91,11 @@ fun MedOrder(index:Int) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MedList(){
+fun LabList(){
     val pagerState = rememberPagerState(pageCount = {
         10
     })
     HorizontalPager(state = pagerState) { page ->
-        MedOrder(page)
+        LabOrder(page)
     }
-    }
+}

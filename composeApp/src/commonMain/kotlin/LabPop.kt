@@ -33,66 +33,67 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun MedPop(
+fun LabPop(
     onDismiss:()->Unit
 ){
+//    val imagePicker = ImagePicker()
+//    val coroutineScope = rememberCoroutineScope() // Create a CoroutineScope
+//    val imageData by imagePicker.pickImage().collectAsState(initial = null)
     var text by remember { mutableStateOf("") } // State variable to store the text
-    var selectedImage by remember { mutableStateOf<ByteArray?>(null) }
 
     AlertDialog( onDismissRequest = onDismiss ,
-                text = {
-                    Column (
-                        modifier = Modifier.fillMaxWidth()
-                    ){
-                        Row (
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ){
-                            Text(
-                                "Upload Your Image",
-                                modifier = Modifier.align(Alignment.CenterVertically),
-                                fontWeight = FontWeight.Bold
-                            )
-                            Button(
-                                modifier = Modifier.wrapContentSize(), onClick = {
+        text = {
+            Column (
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    Text(
+                        "Upload the Lab Tests",
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        fontWeight = FontWeight.Bold
+                    )
+                    Button(
+                        modifier = Modifier.wrapContentSize(), onClick = {
 //                                    coroutineScope.launch {
 //                                        imagePicker.pickImage().collectLatest { imageData ->
 //                                            selectedImage = imageData
 //                                        }
 //                                    }
-
-                                },shape = RoundedCornerShape(15.dp),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
-                           ){
-                                Text("Upload")
-                            }
-                        }
-                        OutlinedTextField(
-                            value = text, onValueChange = {text=it},
-                            modifier = Modifier.fillMaxWidth().height(250.dp).padding(8.dp),
-                            label = {"Description"}, shape = RoundedCornerShape(15.dp)
-                        )
-
-
-                    }
-            }, confirmButton = {
-
-                    Button(colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
-                        , shape = RoundedCornerShape(10.dp),modifier = Modifier.padding(end = 8.dp),
-                        onClick = {
-                            onDismiss()
-                        },
-                    ) {
-                        Text(text = "ORDER")
-
+                        },shape = RoundedCornerShape(15.dp),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
+                    ){
+                        Text("Upload")
                     }
                 }
+                OutlinedTextField(
+                    value = text, onValueChange = {text=it},
+                    modifier = Modifier.fillMaxWidth().height(250.dp).padding(8.dp),
+                    label = {"Description"}, shape = RoundedCornerShape(15.dp)
+                )
 
 
-            )
+            }
+        }, confirmButton = {
 
-    }
+            Button(colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
+                , shape = RoundedCornerShape(10.dp),modifier = Modifier.padding(end = 8.dp),
+                onClick = {
+                    onDismiss()
+                },
+            ) {
+                Text(text = "SUBMIT")
+
+            }
+        }
+
+
+    )
+
+}
 
 
 //@Preview

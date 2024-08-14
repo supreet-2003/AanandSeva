@@ -20,5 +20,12 @@ fun Navigation(){
         }
         composable("screen5") {MedScreen(navController)}
 //        composable("screen6") {MedPop(navController)}
+        composable("screen7") {OtpScreen(navController)}
+//        composable("screen7",
+//            arguments = listOf(navArgument("mob") { type = NavType.StringType })
+//        ) { backStackEntry ->
+//            val mob = backStackEntry.arguments?.getString("mob") ?: ""
+//            OtpScreen(navController=navController,mob = mob)
+//        }
     }
     }

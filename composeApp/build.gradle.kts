@@ -55,7 +55,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
 
             implementation(compose.material3)
-            implementation("com.arkivanov.decompose:decompose:1.0.0")
+//            implementation("com.arkivanov.decompose:decompose:1.0.0")
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha07")
             implementation("io.ktor:ktor-client-core:2.0.0")
             implementation("io.ktor:ktor-client-json:2.0.0")
@@ -118,13 +118,12 @@ android {
     }
 }
 dependencies {
-    implementation(libs.androidx.foundation.android)
-    implementation(libs.androidx.ui.text.android)
-    implementation(libs.androidx.navigation.common.ktx)
-    implementation(libs.androidx.runtime.android)
     implementation(libs.gson)
-    implementation(libs.play.services.drive)
 }
+
+//dependencies {
+//    implementation(libs.androidx.compiler)
+//}
 
 compose.desktop {
     application {

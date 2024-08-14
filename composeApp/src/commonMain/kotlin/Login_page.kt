@@ -70,7 +70,7 @@ fun App(navController: NavHostController) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(50.dp),
+                        .padding(40.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.Top,
                 ) {
@@ -80,10 +80,11 @@ fun App(navController: NavHostController) {
                         modifier = Modifier.size(70.dp)
                     )
                     Text(
+                        modifier = Modifier.fillMaxWidth().padding(10.dp),
                         text = "AanandSeva",
                         fontWeight = FontWeight.Bold,
                         fontSize = 35.sp,
-                        modifier = Modifier.padding(10.dp)
+
                     )
                 }
 
@@ -128,7 +129,7 @@ fun App(navController: NavHostController) {
                                     if (result.toString().contains(":false")) {
                                         println("err $result")
                                         //navigate to otp
-//                                    navController.navigate("screen2") // Navigate on successful login
+//                                    navController.navigate("screen7") // Navigate on successful login
                                     } else if (result.toString().contains("name")){
                                         navController.navigate("screen2")
                                     } else {
@@ -143,7 +144,6 @@ fun App(navController: NavHostController) {
                         },
                     ) {
                         Text(text = "Login")
-
                     }
                     Spacer(modifier = Modifier.padding(10.dp))
                     Text(

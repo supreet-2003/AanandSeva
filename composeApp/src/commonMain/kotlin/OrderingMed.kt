@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -161,7 +162,10 @@ fun MedScreen(navController: NavHostController) {
                             imageVector = Icons.Outlined.Person,
                             contentDescription = null,
                             tint = Color.Gray,
-                            modifier = Modifier.size(40.dp).clickable(onClick = {})
+                            modifier = Modifier.size(40.dp).clickable(onClick = {
+                                navController.navigate("screen4")
+
+                            })
                         )
 
 
@@ -169,11 +173,10 @@ fun MedScreen(navController: NavHostController) {
 
                 },
                 floatingActionButton = {
+
                     FloatingActionButton(
+
                         onClick = {
-//                            if (showDialog) {
-//                                MedPop(onDismiss = {showDialog=false})
-//                            }
                         showDialog=true},
                         backgroundColor = AppColors.Background
                     ) {
@@ -181,13 +184,14 @@ fun MedScreen(navController: NavHostController) {
                 }
                 ,
                 floatingActionButtonPosition = FabPosition.End
-            ) {
+            ) { paddingValues->
+
                 if (showDialog){
                     MedPop(onDismiss = {showDialog=false})
                 }
                 Column (
-                    modifier = Modifier.wrapContentHeight(),
-                    verticalArrangement = Arrangement.SpaceBetween
+                    modifier = Modifier.fillMaxSize().padding(paddingValues),
+//                    verticalArrangement = Arrangement.SpaceBetween
                 ){
                     MedList()
                     }

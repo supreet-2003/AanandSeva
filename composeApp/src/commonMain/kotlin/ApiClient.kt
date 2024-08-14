@@ -17,11 +17,12 @@ import com.google.gson.reflect.TypeToken
 
 class ApiClient {
     private val client = HttpClient()
+    private val ip = "192.168.29.25"
 
      suspend fun login(contactNumber: String): Any? {
         return try {
             println("Phone: $contactNumber")
-            val response: HttpResponse = client.post(url = Url("http://10.0.2.2:4000/users/login/$contactNumber"))
+            val response: HttpResponse = client.post(url = Url("http://$ip:4000/users/login/$contactNumber"))
             if (response.status == HttpStatusCode.OK) {
                 val responseBody = response.bodyAsText()
                 println("Response Body: $responseBody")
@@ -42,7 +43,7 @@ class ApiClient {
             val user1 = Json.parseToJsonElement(user)
             val jsonString = Json.encodeToString(user1)
 
-            val response = client.put("http://10.0.2.2:4000/users/$id") {
+            val response = client.put("http://$ip:4000/users/$id") {
                 contentType(ContentType.Application.Json)
                 body = jsonString
             }
@@ -62,7 +63,7 @@ class ApiClient {
 
     suspend fun fetchAllDoctors(): List<Doctor>? {
         return try {
-            val response: HttpResponse = client.get(url = Url("http://10.0.2.2:4000/doctors"))
+            val response: HttpResponse = client.get(url = Url("http://$ip:4000/doctors"))
             if (response.status == HttpStatusCode.OK) {
                 val responseBody = response.bodyAsText()
                 println("Response Body: $responseBody")

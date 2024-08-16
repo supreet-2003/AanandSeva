@@ -37,7 +37,8 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-
+            implementation(libs.core.splashscreen)
+//            implementation(compose.material3)
 //            implementation("androidx.activity:activity-compose:1.6.1") // For ActivityResultContracts
 //            implementation("io.coil-kt:coil-compose:2.2.2") // Or another image loading library
 //            implementation("io.ktor:ktor-client-core:2.3.0") // Ktor for networking

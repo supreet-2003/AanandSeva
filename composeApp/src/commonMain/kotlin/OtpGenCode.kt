@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
@@ -19,11 +20,13 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.lightColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -56,8 +59,9 @@ fun OtpScreen(
     var phone by remember { mutableStateOf("") }
 //    AlertDialog( onDismissRequest = onDismiss ,
 //        text = {
+
     Column(
-        modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize().background(AppColors.Background), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row (
             modifier = Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.spacedBy(125.dp)
@@ -70,14 +74,6 @@ fun OtpScreen(
             )
             Text("Verify Account", modifier = Modifier.align(Alignment.CenterVertically),
                 style = MaterialTheme.typography.subtitle1,
-//                style=TextStyle(
-//                    color = Color.Black,
-//                    shadow = androidx.compose.ui.graphics.Shadow(
-//                        color = Color.Black,
-//                        blurRadius = 3f
-//                    )
-//                ),
-//                 fontSize = 10.sp,
                 fontWeight = FontWeight.Black)
         }
 
@@ -100,10 +96,17 @@ fun OtpScreen(
 
         )
         Text(
-            "We sent a verification code to the given Mobile Number",
-            modifier = Modifier.fillMaxWidth(0.5f).padding(top=20.dp),
+                "We sent a verification code to ",
+        modifier = Modifier.wrapContentWidth().padding(8.dp,top=20.dp),
+        style = MaterialTheme.typography.subtitle1,
+//        fontWeight = FontWeight.SemiBold
+
+        )
+        Text(
+            "Your Mobile Number. ",
+            modifier = Modifier.wrapContentWidth(),
             style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.SemiBold
+//            fontWeight = FontWeight.SemiBold
 
         )
 
@@ -129,15 +132,6 @@ fun OtpScreen(
             }
         }
 
-//                OutlinedTextField(
-//                    value = text, onValueChange = {text=it},
-//                    modifier = Modifier.fillMaxWidth().height(250.dp).padding(8.dp),
-//                    label = {"Description"}, shape = RoundedCornerShape(15.dp)
-//                )
-
-
-//        Spacer(modifier = Modifier.height(16.dp))
-//        }, confirmButton = {
 
         Button(
             modifier = Modifier.align(Alignment.CenterHorizontally).width(150.dp).padding(top=20.dp),
@@ -162,10 +156,33 @@ fun OtpScreen(
         ){
             Text("Didn't Receive Code? ",)
 
-            Text("Resend Again", color = AppColors.SoftPurple,)
+            Text("Resend Again", color = AppColors.SoftPurple,fontWeight = FontWeight.SemiBold,)
         }
     }
 
+}
+
+
+@Composable
+fun OtpBox(
+    value: String,
+    onValueChange: (String) -> Unit,
+    focusRequester: FocusRequester,
+    modifier: Modifier = Modifier
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier
+            .size(50.dp)
+            .focusRequester(focusRequester)
+            .background(AppColors.Background),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        shape = RoundedCornerShape(10.dp),
+
+
+    )
 }
 
 
@@ -233,32 +250,6 @@ fun OtpScreen(
 //    private fun generateOtp(): String {
 //        return Random.nextInt(1000, 9999).toString()
 //    }
-
-
-@Composable
-fun OtpBox(
-    value: String,
-    onValueChange: (String) -> Unit,
-    focusRequester: FocusRequester,
-    modifier: Modifier = Modifier
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier
-            .size(50.dp)
-            .focusRequester(focusRequester)
-            .background(AppColors.Background),
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        shape = RoundedCornerShape(10.dp),
-
-//        colors = TextFieldDefaults.outlinedTextFieldColors(
-//            focusedBorderColor = Color.Transparent,
-//            unfocusedBorderColor = Color.Transparent
-//        )
-    )
-}
 
 
 

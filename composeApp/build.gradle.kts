@@ -46,6 +46,9 @@ kotlin {
             implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
             implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
             implementation("com.google.code.gson:gson:2.8.9")
+            implementation(libs.core.splashscreen)
+            implementation ("com.russhwolf:multiplatform-settings:1.0.0")
+            implementation ("com.russhwolf:multiplatform-settings-no-arg:1.0.0" )
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -56,15 +59,15 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
 
             implementation(compose.material3)
-//            implementation("com.arkivanov.decompose:decompose:1.0.0")
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha07")
             implementation("io.ktor:ktor-client-core:2.0.0")
             implementation("io.ktor:ktor-client-json:2.0.0")
             implementation("io.ktor:ktor-client-serialization:2.0.0")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
-//            implementation (" org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
-//            implementation ("io.coil-kt:coil:1.4.0")
             implementation("com.google.code.gson:gson:2.8.9")
+
+            implementation ("com.russhwolf:multiplatform-settings:1.0.0")
+            implementation ("com.russhwolf:multiplatform-settings-no-arg:1.0.0" )
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

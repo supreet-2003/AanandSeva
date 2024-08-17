@@ -19,7 +19,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     jvm("desktop")
 
     listOf(
@@ -32,10 +32,10 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -45,6 +45,7 @@ kotlin {
             implementation("io.ktor:ktor-client-core:2.3.0") // Ktor for networking
             implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
             implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
+            implementation("com.google.code.gson:gson:2.8.9")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -61,8 +62,9 @@ kotlin {
             implementation("io.ktor:ktor-client-json:2.0.0")
             implementation("io.ktor:ktor-client-serialization:2.0.0")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
-            implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt")
-            implementation ("io.coil-kt:coil:1.4.0")
+//            implementation (" org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+//            implementation ("io.coil-kt:coil:1.4.0")
+            implementation("com.google.code.gson:gson:2.8.9")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -71,11 +73,13 @@ kotlin {
         iosMain {
             dependencies {
                 implementation("io.ktor:ktor-client-ios:2.0.0")
+                implementation("com.google.code.gson:gson:2.8.9")
             }
         }
-         jsMain  {
+        jsMain {
             dependencies {
                 implementation("io.ktor:ktor-client-js:2.0.0")
+                implementation("com.google.code.gson:gson:2.8.9")
             }
         }
     }

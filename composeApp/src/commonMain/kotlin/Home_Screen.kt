@@ -45,7 +45,6 @@ fun HomeScreen(navController: NavHostController) {
     val apiClient = remember { ApiClient() }
     var doctorsData by remember { mutableStateOf<List<Doctor>?>(null) }
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
-
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             doctorsData = fetchAllDoctors(apiClient)

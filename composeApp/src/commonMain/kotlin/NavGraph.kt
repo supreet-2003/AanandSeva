@@ -8,7 +8,13 @@ import androidx.navigation.navArgument
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "screen1") {
+    val launchScreen: String
+    val token: String = settings.getString("auth_token","")
+    launchScreen = if(token === "")
+        "screen1"
+    else
+        "screen2"
+    NavHost(navController = navController, startDestination = launchScreen) {
         composable("screen1") { App(navController) }
         composable("screen2") { HomeScreen(navController) }
         composable("screen3") { LabTest(navController) }

@@ -29,10 +29,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import androidx.navigation.NavHostController
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.buildJsonObject
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import com.russhwolf.settings.Settings
+
+val settings: Settings = Settings()
+fun storeToken(token: String){
+    settings.putString("auth_token",token)
+}
 
 @Composable
 @Preview
@@ -40,16 +44,19 @@ fun App(navController: NavHostController) {
     val apiClient = remember { ApiClient() }
     val coroutineScope = rememberCoroutineScope()
 
-     suspend fun performLogin(phone: String): Any? {
+     suspend fun performLogin(phone: String): User? {
         try {
             val response = apiClient.login(phone)
-            println("Response: $response")
+            if (response != null && response.authToken != null) {
+                storeToken(response.authToken)
+            }
             return response
         } catch (e: Exception) {
             println("Error: $e.message")
-            return {}
+            return null
         }
     }
+
 
     var phone by remember {
         mutableStateOf("")
@@ -126,11 +133,11 @@ fun App(navController: NavHostController) {
                                 val result = performLogin(phone)
                                 println("Result: $result")
                                 if(result !== null){
-                                    if (result.toString().contains(":false")) {
+                                    if (!result.isVerified) {
                                         println("err $result")
                                         //navigate to otp
 //                                    navController.navigate("screen7") // Navigate on successful login
-                                    } else if (result.toString().contains("name")){
+                                    } else if (result.name !== null){
                                         navController.navigate("screen2")
                                     } else {
                                         println("Result id:$result")

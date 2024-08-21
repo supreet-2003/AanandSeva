@@ -15,18 +15,33 @@ import kotlinx.serialization.encodeToString
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
+
+data class User(
+    val _id: String,
+    val name: String,
+    val clinicAddress: String,
+    val contactNumber: String,
+    val specialization: List<String>,
+    val fee: String,
+    val experience: Int,
+    val authToken: String,
+    val isVerified: Boolean
+)
+
 class ApiClient {
     private val client = HttpClient()
-    private val ip = "192.168.29.25"
+    private val ip = "192.168.29.73"
 
-     suspend fun login(contactNumber: String): Any? {
+     suspend fun login(contactNumber: String): User? {
         return try {
             println("Phone: $contactNumber")
             val response: HttpResponse = client.post(url = Url("http://$ip:4000/users/login/$contactNumber"))
             if (response.status == HttpStatusCode.OK) {
                 val responseBody = response.bodyAsText()
-                println("Response Body: $responseBody")
-                return responseBody
+                val gson = Gson()
+                val itemType = object : TypeToken<User>() {}.type
+                val user: User = gson.fromJson(responseBody, itemType)
+                return user
             } else {
                 println("Error: ${response.status}")
                 return null
@@ -49,7 +64,6 @@ class ApiClient {
             }
             if (response.status == HttpStatusCode.OK) {
                 val responseBody = response.bodyAsText()
-                println("Response Body: $responseBody")
                 return responseBody
             } else {
                 println("Error: ${response.status}")
@@ -66,7 +80,6 @@ class ApiClient {
             val response: HttpResponse = client.get(url = Url("http://$ip:4000/doctors"))
             if (response.status == HttpStatusCode.OK) {
                 val responseBody = response.bodyAsText()
-                println("Response Body: $responseBody")
                 val gson = Gson()
                 val itemType = object : TypeToken<List<Doctor>>() {}.type
                 val doctors: List<Doctor> = gson.fromJson(responseBody, itemType)

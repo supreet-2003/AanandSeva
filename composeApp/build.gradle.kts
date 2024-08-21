@@ -65,6 +65,7 @@ kotlin {
             implementation("io.ktor:ktor-client-serialization:2.0.0")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
             implementation("com.google.code.gson:gson:2.8.9")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:your-version")
 
             implementation ("com.russhwolf:multiplatform-settings:1.0.0")
             implementation ("com.russhwolf:multiplatform-settings-no-arg:1.0.0" )

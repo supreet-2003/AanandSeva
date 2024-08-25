@@ -50,7 +50,7 @@ import kotlin.random.Random
 
 @Composable
 fun OtpScreen(
-    navController: NavHostController
+    navController: NavHostController, data:String?
     ) {
     var text by remember { mutableStateOf("") }
     var selectedImage by remember { mutableStateOf<ByteArray?>(null) }
@@ -59,6 +59,8 @@ fun OtpScreen(
     var phone by remember { mutableStateOf("") }
 //    AlertDialog( onDismissRequest = onDismiss ,
 //        text = {
+
+
 
     Column(
         modifier = Modifier.fillMaxSize().background(AppColors.Background), horizontalAlignment = Alignment.CenterHorizontally
@@ -103,7 +105,7 @@ fun OtpScreen(
 
         )
         Text(
-            "Your Mobile Number. ",
+            "Your Mobile Number +91$data.",
             modifier = Modifier.wrapContentWidth(),
             style = MaterialTheme.typography.subtitle1,
 //            fontWeight = FontWeight.SemiBold

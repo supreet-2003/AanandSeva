@@ -38,12 +38,12 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.core.splashscreen)
-//            implementation(compose.material3)
-//            implementation("androidx.activity:activity-compose:1.6.1") // For ActivityResultContracts
-//            implementation("io.coil-kt:coil-compose:2.2.2") // Or another image loading library
-//            implementation("io.ktor:ktor-client-core:2.3.0") // Ktor for networking
-//            implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
-//            implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
+
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+
+            implementation("io.coil-kt:coil-compose:2.7.0")
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -57,10 +57,12 @@ kotlin {
 //            implementation("com.arkivanov.decompose:decompose:1.0.0")
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha07")
             implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt")
-//            implementation ("io.coil-kt:coil:1.4.0")
 
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.lifecycle.viewmodel)
+            implementation(libs.navigation.compose)
 
-//            implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-alpha03")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -103,6 +105,9 @@ android {
     dependencies {
         debugImplementation(compose.uiTooling)
     }
+}
+dependencies {
+    implementation(libs.play.services.cast.framework)
 }
 
 //dependencies {

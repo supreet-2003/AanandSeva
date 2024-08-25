@@ -34,7 +34,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LabPop(
-    onDismiss:()->Unit
+    onDismiss:()->Unit,
+    onUploadClick: () -> Unit
 ){
 //    val imagePicker = ImagePicker()
 //    val coroutineScope = rememberCoroutineScope() // Create a CoroutineScope
@@ -63,6 +64,7 @@ fun LabPop(
 //                                            selectedImage = imageData
 //                                        }
 //                                    }
+                            onUploadClick()
                         },shape = RoundedCornerShape(15.dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
                     ){

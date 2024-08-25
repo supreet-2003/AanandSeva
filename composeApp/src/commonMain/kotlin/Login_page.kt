@@ -41,12 +41,13 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
-fun App(navController: NavHostController,) {
-
+fun App(navController: NavHostController) {
 
     var phone by remember {
         mutableStateOf("")
+
     }
+
 //    OtpScreen(mob=phone, navController = navController)
     var otpopen by remember { mutableStateOf(false) }
     var pass by remember {
@@ -99,7 +100,10 @@ fun App(navController: NavHostController,) {
                     Spacer(modifier = Modifier.padding(5.dp))
 
                     OutlinedTextField(value = phone, onValueChange = {
-                        phone = it
+                            newValue ->
+                        // Filter input to allow only numbers
+                        phone = newValue.filter { it.isDigit() }
+//                        phone = it
                     }, label = { Text(text = "Enter Your Phone Number") })
                     Spacer(modifier = Modifier.padding(5.dp))
 //                    OutlinedTextField(
@@ -120,10 +124,11 @@ fun App(navController: NavHostController,) {
                           otpopen=true
 //                            navController.navigate("screen7")
                         },
+                        enabled = phone.isNotEmpty()
                     ) {
                         Text(text = "Login")
                         if(otpopen){
-                            navController.navigate("screen7")
+                            navController.navigate("screen7/$phone")
 //                            otpopen=false
                         }
                     }

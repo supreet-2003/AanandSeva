@@ -38,6 +38,7 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,82 +53,90 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import org.example.anandsevakmp.ImageDisplayScreen
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun MedScreen(navController: NavHostController) {
+fun MedScreen(navController: NavHostController,viewModel: ImagePickerViewModel,) {
     MaterialTheme(
         lightColors(
             background = AppColors.Background
 
         )
     ) {
+        var showimage by remember { mutableStateOf(false) }
         var showDialog by remember { mutableStateOf(false) }
+        var imageUri by remember { mutableStateOf<String?>(null) }
 
         Surface(
             color = MaterialTheme.colors.background
         ) {
             val searchText = remember { mutableStateOf(TextFieldValue("")) }
+//            val uri = navController.currentBackStackEntry?.arguments?.getString("imageUri")
+//            if (!uri.isNullOrEmpty()) {
+//                imageUri = uri
+//                showimage = true
+//            }
 
 
             Scaffold(
                 topBar = {
 
-                        Column(
-                            modifier = Modifier.fillMaxWidth().height(120.dp),
-                            verticalArrangement = Arrangement.SpaceBetween
+                    Column(
+                        modifier = Modifier.fillMaxWidth().height(120.dp),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
 
-                                Image(
-                                    painterResource(Res.drawable.logo),
-                                    contentDescription = null,
-                                    modifier = Modifier.padding(
-                                        top = 5.dp,
-                                        start = 10.dp,
-                                        end = 10.dp
-                                    )
+                            Image(
+                                painterResource(Res.drawable.logo),
+                                contentDescription = null,
+                                modifier = Modifier.padding(
+                                    top = 5.dp,
+                                    start = 10.dp,
+                                    end = 10.dp
                                 )
-                                Text(
-                                    text = "AanandSeva",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 25.sp,
-                                    modifier = Modifier.padding(5.dp)
-                                        .align(Alignment.CenterVertically)
-                                )
-                                Spacer(modifier = Modifier.weight(1f))
-                                Icon(
-                                    imageVector = Icons.Outlined.ShoppingCart,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(50.dp).padding(vertical = 5.dp)
-                                        .clickable(
-                                            onClick = {
-                                                navController.navigate("screen5 ")
-
-                                            }
-                                        )
-                                )
-
-                            }
-
-                            Text(
-                                "Order Your Medicines",
-                                modifier = Modifier.align(Alignment.CenterHorizontally).padding(8.dp),
-                                style = TextStyle(
-                                    color = Color.Black,
-                                    fontWeight = FontWeight.Bold,
-                                    shadow = Shadow(
-                                        color = Color.Black,
-                                        blurRadius = 3f
-                                    )
-                                ),
-                                    fontSize = 30.sp
                             )
+                            Text(
+                                text = "AanandSeva",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 25.sp,
+                                modifier = Modifier.padding(5.dp)
+                                    .align(Alignment.CenterVertically)
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            Icon(
+                                imageVector = Icons.Outlined.ShoppingCart,
+                                contentDescription = null,
+                                modifier = Modifier.size(50.dp).padding(vertical = 5.dp)
+                                    .clickable(
+                                        onClick = {
+                                            navController.navigate("screen5 ")
+
+                                        }
+                                    )
+                            )
+
                         }
-                    },
+
+                        Text(
+                            "Order Your Medicines",
+                            modifier = Modifier.align(Alignment.CenterHorizontally).padding(8.dp),
+                            style = TextStyle(
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold,
+                                shadow = Shadow(
+                                    color = Color.Black,
+                                    blurRadius = 3f
+                                )
+                            ),
+                            fontSize = 30.sp
+                        )
+                    }
+                },
                 bottomBar = {
 
                     Row(
@@ -142,7 +151,7 @@ fun MedScreen(navController: NavHostController) {
                             imageVector = Icons.Outlined.Home,
                             contentDescription = null,
                             modifier = Modifier.size(40.dp).clickable(onClick = {
-                              navController.navigate("screen2")
+                                navController.navigate("screen2")
                             }),
                             tint = Color.Gray
                         )
@@ -177,27 +186,47 @@ fun MedScreen(navController: NavHostController) {
                     FloatingActionButton(
 
                         onClick = {
-                        showDialog=true},
+                            showDialog = true
+                        },
                         backgroundColor = AppColors.Background
                     ) {
-                        Icon(Icons.Filled.AddCircle, contentDescription = "Add")}
-                }
-                ,
+                        Icon(Icons.Filled.AddCircle, contentDescription = "Add")
+                    }
+                },
                 floatingActionButtonPosition = FabPosition.End
-            ) { paddingValues->
+            ) { paddingValues ->
 
-                if (showDialog){
-                    MedPop(onDismiss = {showDialog=false})
+                if (showDialog) {
+                        MedPop(onDismiss = {
+                            showDialog = false
+                                           },
+                            onUploadClick = {
+                                  showimage = true
+                                navController.navigate("imagepicker")
+    //                            showDialog = false // Optionally close the dialog
+
+
+                            },
+                            onOrderClick = {
+//                                showDialog=false
+
+                            },viewModel)
+
                 }
-                Column (
+                Column(
                     modifier = Modifier.fillMaxSize().padding(paddingValues),
 //                    verticalArrangement = Arrangement.SpaceBetween
-                ){
-                    MedList()
-                    }
+                ) {
 
+                    if (showimage) {
+                        MedList(viewModel)
+                    }
+                    else {
+                    MedList(viewModel)
                     }
                 }
             }
         }
+    }
+}
 

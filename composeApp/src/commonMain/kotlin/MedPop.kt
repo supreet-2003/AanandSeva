@@ -34,10 +34,19 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun MedPop(
-    onDismiss:()->Unit
+    onDismiss:()->Unit,onUploadClick: () -> Unit,onOrderClick:() -> Unit,viewModel: ImagePickerViewModel
 ){
-    var text by remember { mutableStateOf("") } // State variable to store the text
+    var text by remember { mutableStateOf("") }
     var selectedImage by remember { mutableStateOf<ByteArray?>(null) }
+    val temp = remember { mutableStateOf(0) }
+    var showImagePicker by remember { mutableStateOf(false) }
+//    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+//
+//    val pickImageLauncher = rememberLauncherForActivityResult(
+//        contract = ActivityResultContracts.GetContent()
+//    ) { uri: Uri? ->
+//        selectedImageUri = uri
+//    }
 
     AlertDialog( onDismissRequest = onDismiss ,
                 text = {
@@ -56,11 +65,8 @@ fun MedPop(
                             )
                             Button(
                                 modifier = Modifier.wrapContentSize(), onClick = {
-//                                    coroutineScope.launch {
-//                                        imagePicker.pickImage().collectLatest { imageData ->
-//                                            selectedImage = imageData
-//                                        }
-//                                    }
+                                    showImagePicker=true
+                                    onUploadClick()
 
                                 },shape = RoundedCornerShape(15.dp),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
@@ -69,10 +75,17 @@ fun MedPop(
                             }
                         }
                         OutlinedTextField(
-                            value = text, onValueChange = {text=it},
+                            value = text, onValueChange = {
+                                    newText ->
+                                text = newText
+                                viewModel.updateTextInput(newText)
+                                                          },
                             modifier = Modifier.fillMaxWidth().height(250.dp).padding(8.dp),
                             label = {"Description"}, shape = RoundedCornerShape(15.dp)
                         )
+
+
+
 
 
                     }
@@ -81,7 +94,9 @@ fun MedPop(
                     Button(colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
                         , shape = RoundedCornerShape(10.dp),modifier = Modifier.padding(end = 8.dp),
                         onClick = {
+                            onOrderClick()
                             onDismiss()
+
                         },
                     ) {
                         Text(text = "ORDER")
@@ -91,6 +106,9 @@ fun MedPop(
 
 
             )
+    if(showImagePicker){
+        showImagePicker=false
+    }
 
     }
 

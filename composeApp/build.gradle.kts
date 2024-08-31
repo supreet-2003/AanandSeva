@@ -49,6 +49,9 @@ kotlin {
             implementation(libs.core.splashscreen)
             implementation ("com.russhwolf:multiplatform-settings:1.0.0")
             implementation ("com.russhwolf:multiplatform-settings-no-arg:1.0.0" )
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+            implementation("io.coil-kt:coil-compose:2.7.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -69,6 +72,12 @@ kotlin {
 
             implementation ("com.russhwolf:multiplatform-settings:1.0.0")
             implementation ("com.russhwolf:multiplatform-settings-no-arg:1.0.0" )
+            implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt")
+
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.lifecycle.viewmodel)
+            implementation(libs.navigation.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -127,6 +136,7 @@ android {
 }
 dependencies {
     implementation(libs.gson)
+    implementation(libs.play.services.cast.framework)
 }
 
 //dependencies {

@@ -30,7 +30,7 @@ data class User(
 
 class ApiClient {
     private val client = HttpClient()
-    private val ip = "192.168.29.73"
+    private val ip = "192.168.1.85"
 
      suspend fun login(contactNumber: String): User? {
         return try {

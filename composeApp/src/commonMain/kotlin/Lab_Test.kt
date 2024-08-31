@@ -187,7 +187,11 @@ fun LabTest(navController: NavHostController) {
             floatingActionButtonPosition = FabPosition.End
         ) { paddingValues ->
             if (showDialog1) {
-                LabPop(onDismiss = { showDialog1 = false })
+                LabPop(onDismiss = { showDialog1 = false },
+                    onUploadClick = {
+                        navController.navigate("imagepicker")
+                        showDialog1 = false // Optionally close the dialog
+                    })
             }
             Column(
                 modifier = Modifier.padding(paddingValues),

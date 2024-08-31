@@ -2,6 +2,7 @@ package org.example.anandsevakmp
 
 import App
 import HomeScreen
+import ImagePickerViewModel
 import LabTest
 import MedOrder
 import MedScreen
@@ -32,6 +33,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppAndroidPreview() {
 //    ImagePicker()
-    Navigation()
+    Navigation(ImagePickerViewModel())
 }
 

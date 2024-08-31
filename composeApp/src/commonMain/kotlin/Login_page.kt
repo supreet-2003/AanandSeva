@@ -57,8 +57,14 @@ fun App(navController: NavHostController) {
         }
     }
 
-
     var phone by remember {
+        mutableStateOf("")
+
+    }
+
+//    OtpScreen(mob=phone, navController = navController)
+    var otpopen by remember { mutableStateOf(false) }
+    var pass by remember {
         mutableStateOf("")
     }
     MaterialTheme(
@@ -113,6 +119,7 @@ fun App(navController: NavHostController) {
                         label = { Text(text = "Enter Your Phone Number") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
                     )
+
                     Spacer(modifier = Modifier.padding(5.dp))
 //                    OutlinedTextField(
 //                        value = pass,
@@ -149,8 +156,14 @@ fun App(navController: NavHostController) {
                                 }
                             }
                         },
+                        enabled = phone.isNotEmpty()
                     ) {
                         Text(text = "Login")
+
+                        if(otpopen){
+                            navController.navigate("screen7/$phone")
+//                            otpopen=false
+                        }
                     }
                     Spacer(modifier = Modifier.padding(10.dp))
                     Text(

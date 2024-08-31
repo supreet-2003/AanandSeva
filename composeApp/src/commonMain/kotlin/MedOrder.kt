@@ -21,6 +21,8 @@ import org.example.anandsevakmp.ImageDisplayScreen
 @Composable
 fun MedOrder(index:Int,viewModel: ImagePickerViewModel) {
     val textInput by viewModel.textInput.collectAsState()
+    val shouldDisplayImage by viewModel.shouldDisplayImage.collectAsState()
+
 
 //    val imageUriState = viewModel.imageUri.collectAsState()
 //                ImageDisplayScreen(navController = null, imageUri = imageUriState.value)
@@ -34,9 +36,13 @@ fun MedOrder(index:Int,viewModel: ImagePickerViewModel) {
         ) {
 
             Column(modifier = Modifier.padding(8.dp)) {
-                val imageUriState = viewModel.imageUri.collectAsState()
-                ImageDisplayScreen(navController = null, imageUri = imageUriState.value)
 
+                val imageUriState = viewModel.imageUri.collectAsState()
+//                if(shouldDisplayImage) {
+                    imageUriState.value?.let { imageUri ->
+                        ImageDisplayScreen(navController = null, imageUri = imageUri)
+                    }
+//                }
                 OutlinedTextField(
                     value = textInput, onValueChange = {}, readOnly = true,
                     modifier = Modifier.fillMaxWidth().height(500.dp),

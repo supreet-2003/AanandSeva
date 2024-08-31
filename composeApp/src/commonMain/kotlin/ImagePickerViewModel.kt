@@ -7,6 +7,8 @@ class ImagePickerViewModel:ViewModel() {
 
     private val _imageUri = MutableStateFlow<String?>(null)
     val imageUri: StateFlow<String?> get() = _imageUri.asStateFlow()
+    private val _shouldDisplayImage = MutableStateFlow(false)
+    val shouldDisplayImage: StateFlow<Boolean> = _shouldDisplayImage
 
     fun setImageUri(uri: String?) {
         _imageUri.value = uri
@@ -17,6 +19,9 @@ class ImagePickerViewModel:ViewModel() {
 
     fun updateTextInput(newText: String) {
         _textInput.value = newText
+    }
+    fun setShouldDisplayImage(display: Boolean) {
+        _shouldDisplayImage.value = display
     }
 
 //private val _imageUris = MutableStateFlow<List<String?>>(List(10) { null }) // Initialize with nulls

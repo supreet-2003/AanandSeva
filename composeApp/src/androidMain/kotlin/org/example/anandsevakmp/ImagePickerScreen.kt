@@ -23,33 +23,18 @@ actual fun ImagePickerScreen(navController: NavController, viewModel: ImagePicke
         uri?.let {
             val encodedUri = Uri.encode(it.toString())
             viewModel.setImageUri(encodedUri)
-//            navController.previousBackStackEntry?.savedStateHandle?.set("imageUri", encodedUri)
+            navController.popBackStack()
+//            navController.navigate("med"
+//            )
+
+        } ?: run {
             navController.popBackStack()
 
-//            navController.navigate("imageDisplay/$encodedUri")
+        }
+    }
+
+        LaunchedEffect(Unit) {
+            pickImageLauncher.launch("image/*")
         }
 
     }
-//    pickImageLauncher.launch("image/*")
-
-//}
-    LaunchedEffect(Unit) {
-        pickImageLauncher.launch("image/*")
-    }
-
-//    Column {
-//        Button(onClick = {
-//            pickImageLauncher.launch("image/*")
-//        }) {
-//            Text("Pick Image")
-//        }
-//    }
-//}
-//    val imageUri = viewModel.imageUri.collectAsState().value
-//
-//    if (imageUri != null) {
-//        LaunchedEffect(imageUri) {
-//            navController.popBackStack()
-//        }
-//    }
-}

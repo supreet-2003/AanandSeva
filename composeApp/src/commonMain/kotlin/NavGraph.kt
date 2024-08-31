@@ -17,7 +17,17 @@ fun Navigation(viewModel: ImagePickerViewModel) {
             composable("screen3") { LabTest(navController) }
             composable("screen4") { UserDetails(navController) }
             composable("screen5") { MedScreen(navController,viewModel) }
-//        composable("screen6") {MedPop(navController)}
+        composable("medpop") {MedPop(
+            navController = navController,
+            onDismiss = { navController.popBackStack() },
+            onUploadClick = {
+                // Handle upload action here if necessary
+            },
+            onOrderClick = {
+                // Handle order action here if necessary
+            },
+            viewModel = viewModel
+        )}
             composable("screen7/{data}") {
                 backStackEntry ->
                 val data = backStackEntry.arguments?.getString("data")

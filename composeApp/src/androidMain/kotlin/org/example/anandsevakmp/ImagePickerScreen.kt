@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import convertImageUriToBase64
 
 @Composable
 actual fun ImagePickerScreen(navController: NavController, viewModel: ImagePickerViewModel) {
@@ -21,8 +22,13 @@ actual fun ImagePickerScreen(navController: NavController, viewModel: ImagePicke
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
+            val base64Image = convertImageUriToBase64(context,it)
+            if(base64Image!=null){
+                viewModel.setImageBase64(base64Image)
+            }
             val encodedUri = Uri.encode(it.toString())
             viewModel.setImageUri(encodedUri)
+            viewModel.onImagePicked()
             navController.popBackStack()
 //            navController.navigate("med"
 //            )

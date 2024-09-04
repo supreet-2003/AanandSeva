@@ -63,6 +63,10 @@ kotlin {
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
 
+
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.0")
+            implementation("io.ktor:ktor-utils:2.3.4")
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

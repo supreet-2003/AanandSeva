@@ -313,6 +313,7 @@
                         FloatingActionButton(
                                 onClick = {
 //                                    showDialog = true
+                                    viewModel.resetImagePicked()
                                     navController.navigate("medpop")
                                 },
                             backgroundColor = AppColors.Background

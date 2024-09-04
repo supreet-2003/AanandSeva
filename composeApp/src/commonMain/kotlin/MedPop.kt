@@ -50,8 +50,7 @@ fun MedPop(
     var text by remember { mutableStateOf("") }
 //    var selectedImage by remember { mutableStateOf<ByteArray?>(null) }
 //    val temp = remember { mutableStateOf(0) }
-//    var showImage by remember { mutableStateOf(false) }
-
+    val isImagepicked by viewModel.isImagePicked.collectAsState()
     var showImagePicker by remember { mutableStateOf(false) }
 //    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 //
@@ -62,6 +61,7 @@ fun MedPop(
 //    }
 
     AlertDialog( onDismissRequest = onDismiss ,
+        backgroundColor = Color.White,
                 text = {
                     Column (
                         modifier = Modifier.fillMaxWidth()
@@ -88,7 +88,7 @@ fun MedPop(
 //                           ){
 //                                Text("Upload")
 //                            }
-                            if (showImagePicker) {
+                            if (isImagepicked) {
                                 Icon(
                                     imageVector = Icons.Default.CheckCircle,
                                     contentDescription = "Uploaded",
@@ -98,10 +98,11 @@ fun MedPop(
                             } else {
                                 Button(
                                 modifier = Modifier.wrapContentSize(), onClick = {
-                                    showImagePicker=true
+//                                    viewModel.onImagePicked()
 //                                    viewModel.setSho'uldDisplayImage(true)
 //                                    onUploadClick()
                                     navController.navigate("imagepicker")
+//                                        showImagePicker=true
 
                                 },shape = RoundedCornerShape(15.dp),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)

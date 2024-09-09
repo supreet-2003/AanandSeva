@@ -28,12 +28,23 @@ fun Navigation(viewModel: ImagePickerViewModel) {
         }
             composable("screen5") { MedScreen(navController,viewModel) }
 //        composable("screen6") {MedPop(navController)}
-            composable("screen7/{data}") {
-                backStackEntry ->
-                val data = backStackEntry.arguments?.getString("data")
-                OtpScreen(navController,data)
-
-            }
+        composable(
+            "screen7/{contact}/{otp}",
+            arguments = listOf(
+                navArgument("contact") { type = NavType.StringType },
+                navArgument("otp") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val contact = backStackEntry.arguments?.getString("contact")!!
+            val otp = backStackEntry.arguments?.getInt("otp")!!
+            OtpScreen(navController, contact, otp)
+        }
+//            composable("screen7/{data}") {
+//                backStackEntry ->
+//                val data = backStackEntry.arguments?.getString("data")
+//                OtpScreen(navController,data)
+//
+//            }
             composable("imagepicker"){
                 ImagePickerScreen(navController,viewModel)
             }

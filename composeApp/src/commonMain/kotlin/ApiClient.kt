@@ -25,17 +25,37 @@ data class User(
     val fee: String,
     val experience: Int,
     val authToken: String,
-    val isVerified: Boolean
+    val isVerified: Boolean,
+    val otp: String
 )
 
 class ApiClient {
     private val client = HttpClient()
-    private val ip = "192.168.1.85"
+    private val ip = "192.168.29.73"
 
      suspend fun login(contactNumber: String): User? {
         return try {
             println("Phone: $contactNumber")
             val response: HttpResponse = client.post(url = Url("http://$ip:4000/users/login/$contactNumber"))
+            if (response.status == HttpStatusCode.OK) {
+                val responseBody = response.bodyAsText()
+                val gson = Gson()
+                val itemType = object : TypeToken<User>() {}.type
+                val user: User = gson.fromJson(responseBody, itemType)
+                return user
+            } else {
+                println("Error: ${response.status}")
+                return null
+            }
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
+    }
+
+    suspend fun verifyOtp(contactNumber: String?,otp: Number): User? {
+        return try {
+            val response: HttpResponse = client.post(url = Url("http://$ip:4000/users/verify/$contactNumber/$otp"))
             if (response.status == HttpStatusCode.OK) {
                 val responseBody = response.bodyAsText()
                 val gson = Gson()

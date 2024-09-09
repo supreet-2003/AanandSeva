@@ -47,9 +47,6 @@ fun App(navController: NavHostController) {
      suspend fun performLogin(phone: String): User? {
         try {
             val response = apiClient.login(phone)
-            if (response != null && response.authToken != null) {
-                storeToken(response.authToken)
-            }
             return response
         } catch (e: Exception) {
             println("Error: $e.message")
@@ -59,14 +56,9 @@ fun App(navController: NavHostController) {
 
     var phone by remember {
         mutableStateOf("")
-
     }
+    var isValidPhone by remember { mutableStateOf(true) }
 
-//    OtpScreen(mob=phone, navController = navController)
-    var otpopen by remember { mutableStateOf(false) }
-    var pass by remember {
-        mutableStateOf("")
-    }
     MaterialTheme(
         colors = lightColors(
             background = AppColors.Background
@@ -115,10 +107,23 @@ fun App(navController: NavHostController) {
 
                     OutlinedTextField(
                         value = phone,
-                        onValueChange = { phone = it },
+                        onValueChange = {
+                            if (it.length <= 10 && it.all { char -> char.isDigit() }) {
+                                phone = it
+                            }
+                            isValidPhone = phone.length == 10
+                        },
                         label = { Text(text = "Enter Your Phone Number") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                        isError = !isValidPhone
                     )
+
+                    if (!isValidPhone && phone.isNotEmpty()) {
+                        Text(
+                            text = "Please enter a valid 10-digit phone number",
+                            color = Color.Red
+                        )
+                    }
 
                     Spacer(modifier = Modifier.padding(5.dp))
 //                    OutlinedTextField(
@@ -143,7 +148,7 @@ fun App(navController: NavHostController) {
                                     if (!result.isVerified) {
                                         println("err $result")
                                         //navigate to otp
-//                                    navController.navigate("screen7") // Navigate on successful login
+                                    navController.navigate("screen7/${result.contactNumber}/${result.otp}")
                                     } else if (result.name !== null){
                                         navController.navigate("screen2")
                                     } else {
@@ -156,14 +161,9 @@ fun App(navController: NavHostController) {
                                 }
                             }
                         },
-                        enabled = phone.isNotEmpty()
+                        enabled = isValidPhone && phone.isNotEmpty()
                     ) {
                         Text(text = "Login")
-
-                        if(otpopen){
-                            navController.navigate("screen7/$phone")
-//                            otpopen=false
-                        }
                     }
                     Spacer(modifier = Modifier.padding(10.dp))
                     Text(

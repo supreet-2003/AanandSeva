@@ -33,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,20 +47,36 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 @Composable
 fun OtpScreen(
-    navController: NavHostController, data:String?
+    navController: NavHostController, contact:String?, otp:Int?
     ) {
-    var text by remember { mutableStateOf("") }
-    var selectedImage by remember { mutableStateOf<ByteArray?>(null) }
+    val apiClient = remember { ApiClient() }
     val otpValue = remember { mutableStateOf("") }
-    val focusRequesters = remember { List(6) { FocusRequester() } }
-    var phone by remember { mutableStateOf("") }
-//    AlertDialog( onDismissRequest = onDismiss ,
-//        text = {
+    val focusRequesters = remember { List(4) { FocusRequester() } }
+    var isInvalidOtp = false
+    val coroutineScope = rememberCoroutineScope()
 
+
+    suspend fun verifyOtp() {
+        print(otpValue)
+        println(otp)
+        println(otpValue.value.toInt() ==otp)
+         if(otpValue.value.toInt() ==otp){
+             val response = apiClient.verifyOtp(contact,otpValue.value.toInt())
+             if (response != null && response.authToken != null) {
+                 storeToken(response.authToken)
+             }
+             navController.navigate("screen4/$contact")
+         }
+         else{
+            isInvalidOtp = true
+             println("invalid otp ${isInvalidOtp}${otpValue.value !== ""} && ${otpValue.value.toInt() > 999}")
+        }
+    }
 
 
     Column(
@@ -79,9 +96,6 @@ fun OtpScreen(
                 fontWeight = FontWeight.Black)
         }
 
-
-
-
         Text("Enter Your Verification Code",
             modifier = Modifier.align(Alignment.CenterHorizontally).padding(top=100.dp),
 //            Arrangement = Arrangement.Center,
@@ -98,17 +112,10 @@ fun OtpScreen(
 
         )
         Text(
-                "We sent a verification code to ",
+                "We have sent a verification code to +91-$contact",
         modifier = Modifier.wrapContentWidth().padding(8.dp,top=20.dp),
         style = MaterialTheme.typography.subtitle1,
 //        fontWeight = FontWeight.SemiBold
-
-        )
-        Text(
-            "Your Mobile Number +91$data.",
-            modifier = Modifier.wrapContentWidth(),
-            style = MaterialTheme.typography.subtitle1,
-//            fontWeight = FontWeight.SemiBold
 
         )
 
@@ -116,14 +123,14 @@ fun OtpScreen(
             modifier = Modifier.fillMaxWidth().padding(top=50.dp, start = 8.dp, end = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            for (i in 0 until 6) {
+            for (i in 0 until 4) {
                 OtpBox(
                     value = otpValue.value.getOrNull(i)?.toString() ?: "",
                     onValueChange = { newValue ->
                         if (newValue.length <= 1) {
                             otpValue.value =
                                 otpValue.value.take(i) + newValue + otpValue.value.drop(i + 1)
-                            if (newValue.isNotEmpty() && i < 5) {
+                            if (newValue.isNotEmpty() && i < 3) {
                                 focusRequesters[i + 1].requestFocus()
                             }
                         }
@@ -134,22 +141,23 @@ fun OtpScreen(
             }
         }
 
+        if (isInvalidOtp && otpValue.value !== "" && otpValue.value.toInt() > 999) {
+            Text(
+                text = "Invalid OTP provided!",
+                color = Color.Red
+            )
+        }
 
         Button(
             modifier = Modifier.align(Alignment.CenterHorizontally).width(150.dp).padding(top=20.dp),
-
-
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = AppColors.SoftPurple,
                 contentColor = Color.White
             ),
             shape = RoundedCornerShape(10.dp),
-            onClick = {
-                navController.navigate("screen2")
-            },
+            onClick = { coroutineScope.launch {verifyOtp()} },
         ) {
             Text(text = "VERIFY")
-
         }
         Row (
             modifier = Modifier.fillMaxWidth().padding(top=20.dp),

@@ -43,7 +43,7 @@ actual fun  ImageDisplayScreen(navController: NavController?, imageUri: String?)
 //        }
 //    }
     Box(
-        modifier = androidx.compose.ui.Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .height(280.dp)
             .clip(RoundedCornerShape(16.dp))
@@ -60,7 +60,7 @@ actual fun  ImageDisplayScreen(navController: NavController?, imageUri: String?)
 //                .clip(RoundedCornerShape(15.dp))
             )
         } else {
-            Text("No image selected.")
+            Text("")
         }
     }
 }

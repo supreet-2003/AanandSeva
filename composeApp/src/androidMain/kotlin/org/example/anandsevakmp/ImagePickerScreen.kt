@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import convertImageUriToBase64
 
 @Composable
 actual fun ImagePickerScreen(navController: NavController, viewModel: ImagePickerViewModel) {
@@ -21,35 +22,25 @@ actual fun ImagePickerScreen(navController: NavController, viewModel: ImagePicke
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
+            val base64Image = convertImageUriToBase64(context,it)
+            if(base64Image!=null){
+                viewModel.setImageBase64(base64Image)
+            }
             val encodedUri = Uri.encode(it.toString())
             viewModel.setImageUri(encodedUri)
-//            navController.previousBackStackEntry?.savedStateHandle?.set("imageUri", encodedUri)
+            viewModel.onImagePicked()
+            navController.popBackStack()
+//            navController.navigate("med"
+//            )
+
+        } ?: run {
             navController.popBackStack()
 
-//            navController.navigate("imageDisplay/$encodedUri")
+        }
+    }
+
+        LaunchedEffect(Unit) {
+            pickImageLauncher.launch("image/*")
         }
 
     }
-//    pickImageLauncher.launch("image/*")
-
-//}
-    LaunchedEffect(Unit) {
-        pickImageLauncher.launch("image/*")
-    }
-
-//    Column {
-//        Button(onClick = {
-//            pickImageLauncher.launch("image/*")
-//        }) {
-//            Text("Pick Image")
-//        }
-//    }
-//}
-//    val imageUri = viewModel.imageUri.collectAsState().value
-//
-//    if (imageUri != null) {
-//        LaunchedEffect(imageUri) {
-//            navController.popBackStack()
-//        }
-//    }
-}

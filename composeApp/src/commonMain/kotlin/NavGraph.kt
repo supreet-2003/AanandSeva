@@ -27,7 +27,6 @@ fun Navigation(viewModel: ImagePickerViewModel) {
             UserDetails(navController,backStackEntry.arguments?.getString("id")!!)
         }
             composable("screen5") { MedScreen(navController,viewModel) }
-//        composable("screen6") {MedPop(navController)}
         composable(
             "screen7/{contact}/{otp}",
             arguments = listOf(
@@ -39,12 +38,17 @@ fun Navigation(viewModel: ImagePickerViewModel) {
             val otp = backStackEntry.arguments?.getInt("otp")!!
             OtpScreen(navController, contact, otp)
         }
-//            composable("screen7/{data}") {
-//                backStackEntry ->
-//                val data = backStackEntry.arguments?.getString("data")
-//                OtpScreen(navController,data)
-//
-//            }
+        composable("medpop") {MedPop(
+            navController = navController,
+            onDismiss = { navController.popBackStack() },
+            onUploadClick = {
+                // Handle upload action here if necessary
+            },
+            onOrderClick = {
+                // Handle order action here if necessary
+            },
+            viewModel = viewModel
+        )}
             composable("imagepicker"){
                 ImagePickerScreen(navController,viewModel)
             }
@@ -53,9 +57,6 @@ fun Navigation(viewModel: ImagePickerViewModel) {
                 val imageUri = backStackEntry.arguments?.getString("imageUri")
                 ImageDisplayScreen(navController, imageUri)
             }
-
-
-//        }
         }
     }
 

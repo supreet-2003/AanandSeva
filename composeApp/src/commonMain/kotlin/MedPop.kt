@@ -5,13 +5,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,18 +32,25 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
+import org.example.anandsevakmp.ImageDisplayScreen
 //import kotlin.ImagePicker
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun MedPop(
-    onDismiss:()->Unit,onUploadClick: () -> Unit,onOrderClick:() -> Unit,viewModel: ImagePickerViewModel
+    navController: NavController,
+    onDismiss:()->Unit,
+    onUploadClick: () -> Unit,
+    onOrderClick:() -> Unit,
+    viewModel: ImagePickerViewModel,
 ){
     var text by remember { mutableStateOf("") }
-    var selectedImage by remember { mutableStateOf<ByteArray?>(null) }
-    val temp = remember { mutableStateOf(0) }
+//    var selectedImage by remember { mutableStateOf<ByteArray?>(null) }
+//    val temp = remember { mutableStateOf(0) }
+    val isImagepicked by viewModel.isImagePicked.collectAsState()
     var showImagePicker by remember { mutableStateOf(false) }
 //    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 //
@@ -49,6 +61,7 @@ fun MedPop(
 //    }
 
     AlertDialog( onDismissRequest = onDismiss ,
+        backgroundColor = Color.White,
                 text = {
                     Column (
                         modifier = Modifier.fillMaxWidth()
@@ -63,15 +76,39 @@ fun MedPop(
                                 modifier = Modifier.align(Alignment.CenterVertically),
                                 fontWeight = FontWeight.Bold
                             )
-                            Button(
+//                            Button(
+//                                modifier = Modifier.wrapContentSize(), onClick = {
+//                                    showImagePicker=true
+////                                    viewModel.setSho'uldDisplayImage(true)
+////                                    onUploadClick()
+//                                    navController.navigate("imagepicker")
+//
+//                                },shape = RoundedCornerShape(15.dp),
+//                                colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
+//                           ){
+//                                Text("Upload")
+//                            }
+                            if (isImagepicked) {
+                                Icon(
+                                    imageVector = Icons.Default.CheckCircle,
+                                    contentDescription = "Uploaded",
+                                    tint = Color.Green,
+                                    modifier = Modifier.size(30.dp)
+                                )
+                            } else {
+                                Button(
                                 modifier = Modifier.wrapContentSize(), onClick = {
-                                    showImagePicker=true
-                                    onUploadClick()
+//                                    viewModel.onImagePicked()
+//                                    viewModel.setSho'uldDisplayImage(true)
+//                                    onUploadClick()
+                                    navController.navigate("imagepicker")
+//                                        showImagePicker=true
 
                                 },shape = RoundedCornerShape(15.dp),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
                            ){
                                 Text("Upload")
+                            }
                             }
                         }
                         OutlinedTextField(
@@ -84,7 +121,12 @@ fun MedPop(
                             label = {"Description"}, shape = RoundedCornerShape(15.dp)
                         )
 
-
+//                        if (showImagePicker) {
+//                            val imageUri by viewModel.imageUri.collectAsState()
+//                            imageUri?.let { uri ->
+//                                ImageDisplayScreen(navController = null, imageUri = uri)
+//                            }
+//                        }
 
 
 
@@ -106,9 +148,9 @@ fun MedPop(
 
 
             )
-    if(showImagePicker){
-        showImagePicker=false
-    }
+//    if(showImagePicker){
+//        showImagePicker=false
+//    }
 
     }
 

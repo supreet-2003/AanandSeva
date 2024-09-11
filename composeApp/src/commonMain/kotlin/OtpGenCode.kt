@@ -117,14 +117,33 @@ fun OtpScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             for (i in 0 until 6) {
+//                OtpBox(
+//                    value = otpValue.value.getOrNull(i)?.toString() ?: "",
+//                    onValueChange = { newValue ->
+//                        if (newValue.length <= 1) {
+//                            otpValue.value =
+//                                otpValue.value.take(i) + newValue + otpValue.value.drop(i + 1)
+//                            if (newValue.isNotEmpty() && i < 5) {
+//                                focusRequesters[i + 1].requestFocus()
+//                            }
+//                        }
+//                    },
+//                    focusRequester = focusRequesters[i],
+//                    modifier = Modifier.weight(1f)
+//                )
                 OtpBox(
                     value = otpValue.value.getOrNull(i)?.toString() ?: "",
                     onValueChange = { newValue ->
+                        // Handle OTP input and focus movement
                         if (newValue.length <= 1) {
                             otpValue.value =
                                 otpValue.value.take(i) + newValue + otpValue.value.drop(i + 1)
                             if (newValue.isNotEmpty() && i < 5) {
+                                // Move focus forward if a number is entered
                                 focusRequesters[i + 1].requestFocus()
+                            } else if (newValue.isEmpty() && i > 0) {
+                                // Move focus backward only if the current box is empty
+                                focusRequesters[i - 1].requestFocus()
                             }
                         }
                     },

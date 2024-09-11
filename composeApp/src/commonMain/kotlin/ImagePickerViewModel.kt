@@ -45,7 +45,16 @@ fun setImageBase64(base64: String) {
     }
 
 
-//private val _imageUris = MutableStateFlow<List<String?>>(List(10) { null }) // Initialize with nulls
+    private val _selectedStatus = MutableStateFlow("Status")
+    val selectedStatus: StateFlow<String> = _selectedStatus
+    fun updateStatus(newStatus: String) {
+        _selectedStatus.value = newStatus
+    }
+
+
+
+
+//private val _imageUris = MutableStateFlow<List<String?>>(List(10) { null })
 //    val imageUris: tateFlow<List<String?>> = _imageUris
 //
 //    fun setImageUri(uri: String?, index: Int) {

@@ -136,6 +136,7 @@ fun MedPop(
                     Button(colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
                         , shape = RoundedCornerShape(10.dp),modifier = Modifier.padding(end = 8.dp),
                         onClick = {
+                            viewModel.updateStatus("Ordered")
                             onOrderClick()
                             onDismiss()
 

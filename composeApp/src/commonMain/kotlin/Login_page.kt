@@ -47,6 +47,9 @@ fun App(navController: NavHostController) {
      suspend fun performLogin(phone: String): User? {
         try {
             val response = apiClient.login(phone)
+            if (response != null && response.authToken != null) {
+                 storeToken(response.authToken)
+             }
             return response
         } catch (e: Exception) {
             println("Error: $e.message")

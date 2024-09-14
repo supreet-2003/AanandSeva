@@ -363,7 +363,7 @@
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                            MedList(viewModel = viewModel)
+                            MedList(viewModel = viewModel, commentTr = {navController.navigate("screen6")})
 
 
                     }

@@ -1,3 +1,4 @@
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -42,7 +43,17 @@ fun Navigation(viewModel: ImagePickerViewModel) {
                 val imageUri = backStackEntry.arguments?.getString("imageUri")
                 ImageDisplayScreen(navController, imageUri)
             }
+            composable("screen6") {
+                Comments(
+                    navController = navController,
+                    onComment = { comment ->
+                        viewModel.updateTextInput(comment)
+                    }// Update the comment in ViewModel
+                   ,
+                    onDismiss = {navController.popBackStack()}
+                )
 
+            }
 
 //        }
         }

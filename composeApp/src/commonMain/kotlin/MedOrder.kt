@@ -1,12 +1,15 @@
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,11 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import org.example.anandsevakmp.ImageDisplayScreen
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun MedOrder(index:Int,viewModel: ImagePickerViewModel) {
+fun MedOrder(index:Int,viewModel: ImagePickerViewModel,navController: NavController,commentT:()->Unit) {
     val textInput by viewModel.textInput.collectAsState()
     val shouldDisplayImage by viewModel.shouldDisplayImage.collectAsState()
     var selectedOption by remember { mutableStateOf("Status") }
@@ -55,49 +60,33 @@ fun MedOrder(index:Int,viewModel: ImagePickerViewModel) {
                 .fillMaxWidth().height(500.dp).padding(8.dp)
         ) {
 
-            Column(modifier = Modifier.padding(8.dp)) {
-//                Box(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-////                        .padding(8.dp)
-//                    ,
-//                    contentAlignment = Alignment.TopEnd
-//                ) {
-//                    OutlinedTextField(
-//                        value = selectedOption,
-//                        onValueChange = {},
-//                        readOnly = true,
-//                        modifier = Modifier
-////                            .size(50.dp)
-//                            .width(150.dp)
-//                            .clickable { dropdown = true }
-//                            .align(Alignment.End)
-//                        ,
-//                        label = { Text("Status") },
-//                        trailingIcon = {
-//                            Icon(
-//                                imageVector = Icons.Default.ArrowDropDown,
-//                                contentDescription = "Dropdown Arrow"
-//                            )
-//                        }
-//                    )
-                Button(
-                    modifier = Modifier.align(Alignment.End),
-                    onClick = {dropdown=true},
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = when (selectedStatus) {
-                            "Cancelled" -> Color(0xFFC7253E)
-                            "Completed" -> Color(0xFF00712D)
-//                            "Ordered" -> Color.Green
-                            else -> AppColors.SoftPurple
-                        },
-                        contentColor = Color.White
+            Column(modifier = Modifier.padding(8.dp),) {
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.SpaceBetween) {
 
-                    ),
-                    shape = RoundedCornerShape(10.dp),
-                ){
-                    Text(text=selectedStatus)
-                }
+                    Button(colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
+                        , shape = RoundedCornerShape(10.dp), onClick = {
+                            commentT()
+                        }){
+                        Text("Add Comment")
+                    }
+
+                    Button(
+//                        modifier = Modifier.align(Alignment.End),
+                        onClick = { dropdown = true },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = when (selectedStatus) {
+                                "Cancelled" -> Color(0xFFC7253E)
+                                "Completed" -> Color(0xFF00712D)
+//                            "Ordered" -> Color.Green
+                                else -> AppColors.SoftPurple
+                            },
+                            contentColor = Color.White
+
+                        ),
+                        shape = RoundedCornerShape(10.dp),
+                    ) {
+                        Text(text = selectedStatus)
+                    }
 
                     DropdownMenu(
 //                        modifier = Modifier.size(50.dp),
@@ -105,7 +94,7 @@ fun MedOrder(index:Int,viewModel: ImagePickerViewModel) {
 //                            .size(50.dp)
                             .width(150.dp)
 //                            .clickable { dropdown = true }
-                            .align(Alignment.End),
+                            ,
                         expanded = dropdown,
                         onDismissRequest = { dropdown = false }
 
@@ -121,6 +110,7 @@ fun MedOrder(index:Int,viewModel: ImagePickerViewModel) {
                             )
                         }
                     }
+                }
 //                }
 
 
@@ -130,36 +120,29 @@ fun MedOrder(index:Int,viewModel: ImagePickerViewModel) {
                         ImageDisplayScreen(navController = null, imageUri = imageUri)
                     }
 //                }
+
+                //Comment Bar
                 OutlinedTextField(
-                    value = textInput, onValueChange = {}, readOnly = true,
-                    modifier = Modifier.fillMaxWidth().height(500.dp),
+                    value = textInput, onValueChange = {textInput}, readOnly = true,
+                    modifier = Modifier.fillMaxWidth().height(300.dp), shape = RoundedCornerShape(6.dp)
                 )
-//                Button(colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
-//                    , shape = RoundedCornerShape(10.dp),modifier = Modifier.padding(end = 8.dp),
-//                    onClick = {
-////                            navController.navigate("screen7")
-//
-//                    },){
-//                    Text("Check Status", )
-//
-//                }
+
             }
             }
         }
     }
-//
-//fun DropdownMenuItem(onClick: () -> Unit, interactionSource: () -> Unit) {
-//
-//}
+
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MedList(viewModel: ImagePickerViewModel){
+fun MedList(viewModel: ImagePickerViewModel,commentTr: () -> Unit){
+    val navController = rememberNavController()
     val pagerState = rememberPagerState(pageCount = {
         10
     })
     HorizontalPager(state = pagerState) { page ->
-        MedOrder(page, viewModel)
+        MedOrder(page, viewModel, navController = navController, commentT = commentTr)
+
     }
     }

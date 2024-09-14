@@ -45,8 +45,8 @@ actual fun  ImageDisplayScreen(navController: NavController?, imageUri: String?)
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(280.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .height(230.dp)
+            .clip(RoundedCornerShape(6.dp))
 
     ) {
         if (imageUri != null) {

@@ -34,12 +34,17 @@ fun setImageBase64(base64: String) {
     fun setImageUri(uri: String?) {
         _imageUri.value = uri
     }
+
+
     private val _textInput = MutableStateFlow("")
     val textInput: StateFlow<String> = _textInput
 
     fun updateTextInput(newText: String) {
         _textInput.value = newText
     }
+
+
+
     fun setShouldDisplayImage(display: Boolean) {
         _shouldDisplayImage.value = display
     }
@@ -51,15 +56,4 @@ fun setImageBase64(base64: String) {
         _selectedStatus.value = newStatus
     }
 
-
-
-
-//private val _imageUris = MutableStateFlow<List<String?>>(List(10) { null })
-//    val imageUris: tateFlow<List<String?>> = _imageUris
-//
-//    fun setImageUri(uri: String?, index: Int) {
-//        _imageUris.value = _imageUris.value.toMutableList().apply {
-//            this[index] = uri
-//        }
-//    }
 }

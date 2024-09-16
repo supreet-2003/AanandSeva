@@ -12,6 +12,7 @@ fun Navigation(viewModel: ImagePickerViewModel) {
     val navController = rememberNavController()
     val launchScreen: String
     val token: String = settings.getString("auth_token","")
+    println("tokenn$token")
     launchScreen = if(token === "")
         "screen1"
     else

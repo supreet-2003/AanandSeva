@@ -74,12 +74,18 @@ kotlin {
             implementation ("com.russhwolf:multiplatform-settings-no-arg:1.0.0" )
             implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt")
 
+            implementation("com.google.api-client:google-api-client:2.2.0")
+            implementation("com.google.oauth-client:google-oauth-client-jetty:1.34.1")
+            implementation("com.google.apis:google-api-services-drive:v3-rev20230815-2.0.0")
+            implementation("com.google.api-client:google-api-client-gson:2.2.0")
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.0")
             implementation("io.ktor:ktor-utils:2.3.4")
+
+            
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -119,7 +125,17 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+
     }
+    tasks.withType<Jar> {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/NOTICE")  // Optional: exclude additional files if needed
+        exclude("META-INF/LICENSE") // Optional: exclude additional files if needed
+    }
+    
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false

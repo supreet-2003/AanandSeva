@@ -34,16 +34,11 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
-import java.io.FileInputStream
 import java.io.FileNotFoundException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File as JavaFile
-import java.io.InputStreamReader
-import java.io.BufferedReader
-
 
 
 fun getGoogleDriveService(): Drive {
@@ -84,7 +79,7 @@ suspend fun uploadFileToGoogleDrive(service: Drive, filePath: String?, folderId:
             println("Uploading file with name: ${fileMetadata.name}")
 
             // Create file content (MIME type can be adjusted based on file type)
-            val mediaContent = FileContent("application/octet-stream", file)
+            val mediaContent = FileContent("image/jpeg", file)
             println("Media content created with file: ${file.absolutePath}")
 
             // Extra logging for the file
@@ -124,21 +119,18 @@ fun MedPop(
 ) {
     var text by remember { mutableStateOf("") }
     val isImagePicked by viewModel.isImagePicked.collectAsState()
-    val imageUri by viewModel.imageUri.collectAsState()
-    var showImagePicker by remember { mutableStateOf(false) }
+    val imageFilePath by viewModel.imageData.collectAsState()
 
     val driveService = getGoogleDriveService()
 
     fun handleFileUpload() {
         println("Image picked: $isImagePicked")
-        println("ViewModel image URI: ${imageUri}")
 
         if (isImagePicked) {
-            val filePath = "/storage/emulated/0/Pictures/IMG_20240914_235925.jpg"
-            println("File path to be uploaded: $filePath")
+            println("Actual file----: $imageFilePath")
 
             GlobalScope.launch(Dispatchers.Main) {
-                val uploadedFile = uploadFileToGoogleDrive(driveService, filePath, "AanandSeva")
+                val uploadedFile = uploadFileToGoogleDrive(driveService, imageFilePath?.imagePath, "AanandSeva")
                 println("------uploaded file------------$uploadedFile")
                 uploadedFile?.let {
                     println("File uploaded successfully!")

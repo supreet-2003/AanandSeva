@@ -38,10 +38,12 @@
     import androidx.compose.material.icons.outlined.ShoppingCart
     import androidx.compose.material.lightColors
     import androidx.compose.runtime.Composable
+    import androidx.compose.runtime.LaunchedEffect
     import androidx.compose.runtime.collectAsState
     import androidx.compose.runtime.getValue
     import androidx.compose.runtime.mutableStateOf
     import androidx.compose.runtime.remember
+    import androidx.compose.runtime.rememberCoroutineScope
     import androidx.compose.runtime.setValue
     import androidx.compose.ui.Alignment
     import androidx.compose.ui.Modifier
@@ -55,190 +57,38 @@
     import androidx.navigation.NavHostController
     import org.example.anandsevakmp.ImageDisplayScreen
     import org.jetbrains.compose.resources.painterResource
+   import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-    //@Composable
-    //fun MedScreen(navController: NavHostController,viewModel: ImagePickerViewModel,) {
-    //    MaterialTheme(
-    //        lightColors(
-    //            background = AppColors.Background
-    //
-    //        )
-    //    ) {
-    //        var showimage by remember { mutableStateOf(false) }
-    //        var showDialog by remember { mutableStateOf(false) }
-    //        var imageUri by remember { mutableStateOf<String?>(null) }
-    //
-    //        Surface(
-    //            color = MaterialTheme.colors.background
-    //        ) {
-    //            val searchText = remember { mutableStateOf(TextFieldValue("")) }
-    ////            val uri = navController.currentBackStackEntry?.arguments?.getString("imageUri")
-    ////            if (!uri.isNullOrEmpty()) {
-    ////                imageUri = uri
-    ////                showimage = true
-    ////            }
-    //
-    //
-    //            Scaffold(
-    //                topBar = {
-    //
-    //                    Column(
-    //                        modifier = Modifier.fillMaxWidth().height(120.dp),
-    //                        verticalArrangement = Arrangement.SpaceBetween
-    //                    ) {
-    //                        Row(
-    //                            modifier = Modifier.fillMaxWidth(),
-    //                            horizontalArrangement = Arrangement.SpaceBetween
-    //                        ) {
-    //
-    //                            Image(
-    //                                painterResource(Res.drawable.logo),
-    //                                contentDescription = null,
-    //                                modifier = Modifier.padding(
-    //                                    top = 5.dp,
-    //                                    start = 10.dp,
-    //                                    end = 10.dp
-    //                                )
-    //                            )
-    //                            Text(
-    //                                text = "AanandSeva",
-    //                                fontWeight = FontWeight.Bold,
-    //                                fontSize = 25.sp,
-    //                                modifier = Modifier.padding(5.dp)
-    //                                    .align(Alignment.CenterVertically)
-    //                            )
-    //                            Spacer(modifier = Modifier.weight(1f))
-    //                            Icon(
-    //                                imageVector = Icons.Outlined.ShoppingCart,
-    //                                contentDescription = null,
-    //                                modifier = Modifier.size(50.dp).padding(vertical = 5.dp)
-    //                                    .clickable(
-    //                                        onClick = {
-    //                                            navController.navigate("screen5 ")
-    //
-    //                                        }
-    //                                    )
-    //                            )
-    //
-    //                        }
-    //
-    //                        Text(
-    //                            "Order Your Medicines",
-    //                            modifier = Modifier.align(Alignment.CenterHorizontally).padding(8.dp),
-    //                            style = TextStyle(
-    //                                color = Color.Black,
-    //                                fontWeight = FontWeight.Bold,
-    //                                shadow = Shadow(
-    //                                    color = Color.Black,
-    //                                    blurRadius = 3f
-    //                                )
-    //                            ),
-    //                            fontSize = 30.sp
-    //                        )
-    //                    }
-    //                },
-    //                bottomBar = {
-    //
-    //                    Row(
-    //                        modifier = Modifier
-    //                            .fillMaxWidth()
-    //                            .size(50.dp)
-    //                            .background(Color.White),
-    //                        horizontalArrangement = Arrangement.SpaceBetween,
-    //                        verticalAlignment = Alignment.Bottom
-    //                    ) {
-    //                        Icon(
-    //                            imageVector = Icons.Outlined.Home,
-    //                            contentDescription = null,
-    //                            modifier = Modifier.size(40.dp).clickable(onClick = {
-    //                                navController.navigate("screen2")
-    //                            }),
-    //                            tint = Color.Gray
-    //                        )
-    //                        Image(
-    //                            painterResource(Res.drawable.medicine), contentDescription = null,
-    //                            modifier = Modifier.size(40.dp).clickable(onClick = { })
-    //                        )
-    //                        Image(
-    //                            painterResource(Res.drawable.flask),
-    //                            contentDescription = "Lab Test",
-    //                            modifier = Modifier.size(40.dp)
-    //                                .clickable
-    //                                    (
-    //                                    onClick = { navController.navigate("screen3") })
-    //                        )
-    //                        Icon(
-    //                            imageVector = Icons.Outlined.Person,
-    //                            contentDescription = null,
-    //                            tint = Color.Gray,
-    //                            modifier = Modifier.size(40.dp).clickable(onClick = {
-    //                                navController.navigate("screen4")
-    //
-    //                            })
-    //                        )
-    //
-    //
-    //                    }
-    //
-    //                },
-    //                floatingActionButton = {
-    //
-    //                    FloatingActionButton(
-    //
-    //                        onClick = {
-    //                            showDialog = true
-    //                        },
-    //                        backgroundColor = AppColors.Background
-    //                    ) {
-    //                        Icon(Icons.Filled.AddCircle, contentDescription = "Add")
-    //                    }
-    //                },
-    //                floatingActionButtonPosition = FabPosition.End
-    //            ) { paddingValues ->
-    //
-    //                if (showDialog) {
-    //                        MedPop(onDismiss = {
-    //                            showDialog = false
-    //                                           },
-    //                            onUploadClick = {
-    //                                  showimage = true
-    //                                navController.navigate("imagepicker")
-    //    //                            showDialog = false // Optionally close the dialog
-    //
-    //
-    //                            },
-    //                            onOrderClick = {
-    ////                                showDialog=false
-    //
-    //                            },viewModel)
-    //
-    //                }
-    //                Column(
-    //                    modifier = Modifier.fillMaxSize().padding(paddingValues),
-    ////                    verticalArrangement = Arrangement.SpaceBetween
-    //                ) {
-    //
-    //                    if (showimage) {
-    //                        MedList(viewModel)
-    //                    }
-    //                    else {
-    //                    MedList(viewModel)
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
+
+    suspend fun fetchMedicineOrders(apiClient: ApiClient): List<Order>? {
+    return try {
+        val response = apiClient.fetchMedicineOrders()
+        processOrders(response, driveService)
+        println("Response: $response")
+        response
+    } catch (e: Exception) {
+        println("Error: ${e.message}")
+        null
+    }
+}
     @Composable
     fun MedScreen(navController: NavHostController, viewModel: ImagePickerViewModel) {
+
+        var medicineOrders by remember { mutableStateOf<List<Order>?>(null) }
+        val coroutineScope = rememberCoroutineScope()
+        val apiClient = remember { ApiClient() }
+
+        LaunchedEffect(Unit) {
+            coroutineScope.launch {
+                medicineOrders = fetchMedicineOrders(apiClient)
+            }
+        }
         MaterialTheme(
             lightColors(
                 background = AppColors.Background
             )
         ) {
-            var showDialog by remember { mutableStateOf(false) }
-            var imageUri by remember { mutableStateOf<String?>(null) }
-
             Surface(color = MaterialTheme.colors.background) {
 
                 Scaffold(
@@ -312,7 +162,6 @@
                     floatingActionButton = {
                         FloatingActionButton(
                                 onClick = {
-//                                    showDialog = true
                                     viewModel.resetImagePicked()
                                     navController.navigate("medpop")
                                 },
@@ -323,18 +172,6 @@
                     },
                     floatingActionButtonPosition = FabPosition.End
                 ) { paddingValues ->
-
-//                    if (showDialog) {
-//                        MedPop(
-//                            onDismiss = { showDialog = false },
-//                            onUploadClick = {
-//                                navController.navigate("imagepicker")
-//                            },
-//                            onOrderClick = {showDialog = false },
-//                            viewModel = viewModel
-//                        )
-//                    }
-
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -354,18 +191,8 @@
                             ),
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
-
-    //                    imageUri?.let {
-    //                        ImageDisplayScreen(navController = navController, imageUri = it)
-    //                    } ?: run {
-    //                        Text("", color = Color.Gray)
-    //                    }
-
                         Spacer(modifier = Modifier.height(16.dp))
-
-                            MedList(viewModel = viewModel)
-
-
+                            MedList(medicineOrders)
                     }
                 }
             }

@@ -68,7 +68,7 @@ fun OtpScreen(
          if(otpValue.value.toInt() ==otp){
              val response = apiClient.verifyOtp(contact,otpValue.value.toInt())
              if (response != null && response.authToken != null) {
-                 storeToken(response.authToken)
+                 storeToken(response.authToken, response.name, response.type)
              }
              navController.navigate("screen4/$contact")
          }

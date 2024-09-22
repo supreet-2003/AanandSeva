@@ -7,12 +7,14 @@ import androidx.navigation.navArgument
 import org.example.anandsevakmp.ImageDisplayScreen
 import org.example.anandsevakmp.ImagePickerScreen
 
+
+val token: String = settings.getString("auth_token","")
+val userType: String = settings.getString("userType","")
+val userName: String = settings.getString("userName","")
 @Composable
 fun Navigation(viewModel: ImagePickerViewModel) {
     val navController = rememberNavController()
     val launchScreen: String
-    val token: String = settings.getString("auth_token","")
-    println("tokenn$token")
     launchScreen = if(token === "")
         "screen1"
     else

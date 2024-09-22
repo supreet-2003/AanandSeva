@@ -21,27 +21,6 @@ import coil.compose.AsyncImage
 
 @Composable
 actual fun  ImageDisplayScreen(navController: NavController?, imageUri: String?) {
-//    var imageUri by remember { mutableStateOf<Uri?>(null) }
-//
-//    Column() {
-//        ImagePicker { uri ->
-//            imageUri = uri
-//        }
-//
-//        imageUri?.let { uri ->
-//            AsyncImage(
-//                model = ImageRequest.Builder(LocalContext.current)
-//                    .data(uri)
-//                    .crossfade(true)
-//                    .build(),
-//                contentDescription = "Picked Image",
-//                modifier = Modifier
-//                    .size(200.dp)
-//                    .clip(RoundedCornerShape(8.dp)),
-//                contentScale = ContentScale.Crop
-//            )
-//        }
-//    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,9 +34,6 @@ actual fun  ImageDisplayScreen(navController: NavController?, imageUri: String?)
                 model = Uri.parse(decodedUri),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-//            modifier = Modifier.fillMaxSize(
-//                .padding(16.dp)
-//                .clip(RoundedCornerShape(15.dp))
             )
         } else {
             Text("")

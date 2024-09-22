@@ -10,23 +10,23 @@ import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.example.anandsevakmp.ImageDisplayScreen
 
+
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun MedOrder(index:Int,viewModel: ImagePickerViewModel) {
-    val textInput by viewModel.textInput.collectAsState()
-    val shouldDisplayImage by viewModel.isImagePicked.collectAsState()
-
-
-//    val imageUriState = viewModel.imageUri.collectAsState()
-//                ImageDisplayScreen(navController = null, imageUri = imageUriState.value)
-
+fun MedOrder(index:Int,order: Order) {
+    val textInput = order.comments[0].text;
      Box(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -37,12 +37,10 @@ fun MedOrder(index:Int,viewModel: ImagePickerViewModel) {
 
             Column(modifier = Modifier.padding(8.dp)) {
 
-                val imageUriState = viewModel.imageData.collectAsState()
-//                if(shouldDisplayImage) {
-                    imageUriState.value?.let { imageUri ->
-                        ImageDisplayScreen(navController = null, imageUri = imageUri.imagePath)
-                    }
-//                }
+//                val imageUriState = viewModel.imageData.collectAsState()
+//                    imageUriState.value?.let { imageUri ->
+//                        ImageDisplayScreen(navController = null, imageUri = imageUri.imagePath)
+//                    }
                 OutlinedTextField(
                     value = textInput, onValueChange = {}, readOnly = true,
                     modifier = Modifier.fillMaxWidth().height(500.dp),
@@ -53,18 +51,13 @@ fun MedOrder(index:Int,viewModel: ImagePickerViewModel) {
     }
 
 
-
-
-
-
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MedList(viewModel: ImagePickerViewModel){
+fun MedList(orderData: List<Order>?){
     val pagerState = rememberPagerState(pageCount = {
         10
     })
     HorizontalPager(state = pagerState) { page ->
-        MedOrder(page, viewModel)
+        orderData?.get(page)?.let { MedOrder(page, it) }
     }
-    }
+}

@@ -27,86 +27,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.google.api.client.auth.oauth2.Credential
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
-import com.google.api.client.http.FileContent
-import com.google.api.client.json.gson.GsonFactory
-import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
-import com.google.api.services.drive.model.File
-import java.io.FileNotFoundException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-
-fun getGoogleDriveService(): Drive {
-    val resourceAsStream = Thread.currentThread().contextClassLoader.getResourceAsStream("aanandseva-ccc66d6e586e.json")
-
-    // Ensure the stream is not null
-    requireNotNull(resourceAsStream) { "Resource file not found: aanandseva-ccc66d6e586e.json" }
-
-    val credential: Credential = GoogleCredential.fromStream(resourceAsStream)
-        .createScoped(listOf(DriveScopes.DRIVE_FILE))
-
-    return Drive.Builder(
-        com.google.api.client.http.javanet.NetHttpTransport(),
-        GsonFactory.getDefaultInstance(),
-        credential
-    ).setApplicationName("Drive API Kotlin").build()
-}
-
-
-suspend fun uploadFileToGoogleDrive(service: Drive, filePath: String?, folderId: String? = null): File? {
-    return withContext(Dispatchers.IO) {
-        try {
-            // Check if file exists
-            val file = java.io.File(filePath)
-            println("File exists: ${file.exists()}, Path: $filePath")
-
-            if (!file.exists()) {
-                println("File not found at path: $filePath")
-                return@withContext null
-            }
-
-            // Create file metadata
-            val fileMetadata = File().apply {
-                name = file.name
-                parents = folderId?.let { listOf(it) }
-            }
-
-            println("Uploading file with name: ${fileMetadata.name}")
-
-            // Create file content (MIME type can be adjusted based on file type)
-            val mediaContent = FileContent("image/jpeg", file)
-            println("Media content created with file: ${file.absolutePath}")
-
-            // Extra logging for the file
-            println("File content type: ${mediaContent.type}")
-            println("File size: ${file.length()} bytes")
-
-            // Upload the file to Google Drive
-            val uploadedFile = service.files().create(fileMetadata, mediaContent)
-                .setFields("id, webViewLink, webContentLink")
-                .execute()
-
-            println("File uploaded successfully: ID = ${uploadedFile.id}")
-            println("Web View Link: ${uploadedFile.webViewLink}")
-            uploadedFile
-        } catch (e: FileNotFoundException) {
-            println("Error: File not found: ${e.message}")
-            null
-        } catch (e: com.google.api.client.googleapis.json.GoogleJsonResponseException) {
-            println("Google API error: ${e.statusCode} - ${e.details}")
-            null
-        } catch (e: Exception) {
-            println("General error during file upload: ${e.message}")
-            e.printStackTrace()
-            null
-        }
-    }
-}
+val driveService = getGoogleDriveService()
 
 // Composable function for the dialog
 @Composable
@@ -120,8 +45,7 @@ fun MedPop(
     var text by remember { mutableStateOf("") }
     val isImagePicked by viewModel.isImagePicked.collectAsState()
     val imageFilePath by viewModel.imageData.collectAsState()
-
-    val driveService = getGoogleDriveService()
+    val apiClient = remember { ApiClient() }
 
     fun handleFileUpload() {
         println("Image picked: $isImagePicked")
@@ -130,13 +54,24 @@ fun MedPop(
             println("Actual file----: $imageFilePath")
 
             GlobalScope.launch(Dispatchers.Main) {
-                val uploadedFile = uploadFileToGoogleDrive(driveService, imageFilePath?.imagePath, "AanandSeva")
+                val uploadedFile = uploadFileToGoogleDrive(driveService, imageFilePath?.imagePath, null)
                 println("------uploaded file------------$uploadedFile")
                 uploadedFile?.let {
                     println("File uploaded successfully!")
                     println("File ID: ${it.id}")
                     println("Web View Link: ${it.webViewLink}")
+                    makeFilePublic(driveService, it.id)
                 } ?: println("File upload failed!")
+
+                val link = "https://drive.google.com/file/d/1HM1QsZ2Td8m3TvekQiYnwUhmyky-hXOT/view"
+                val name = "10100000657.jpeg"
+                try {
+                    val json = """{"file": { "fileName": "$name", "url": "$link"}, "comments": {"text":"$text","date":"","commentedBy":"$userName"}, "orderedBy": "$userName", "orderedOn": "", "orderType": "medicine", "orderStatus": "Ordered"}"""
+                    val response = apiClient.saveOrder(json)
+                    println("Response: $response")
+                } catch (e: Exception) {
+                    println("Error: $e.message")
+                }
             }
         }
     }

@@ -99,7 +99,7 @@ fun MedPop(
                                 Button(
                                 modifier = Modifier.wrapContentSize(), onClick = {
 //                                    viewModel.onImagePicked()
-//                                    viewModel.setSho'uldDisplayImage(true)
+//                                    viewModel.setSho'uldDis       playImage(true)
 //                                    onUploadClick()
                                     navController.navigate("imagepicker")
 //                                        showImagePicker=true

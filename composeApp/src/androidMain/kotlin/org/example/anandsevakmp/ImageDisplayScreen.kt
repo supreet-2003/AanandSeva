@@ -2,6 +2,8 @@ package org.example.anandsevakmp
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -45,7 +47,8 @@ actual fun  ImageDisplayScreen(navController: NavController?, imageUri: String?)
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(230.dp)
+//            .height(230.dp)
+            .fillMaxHeight(0.4f)
             .clip(RoundedCornerShape(6.dp))
 
     ) {
@@ -55,6 +58,7 @@ actual fun  ImageDisplayScreen(navController: NavController?, imageUri: String?)
                 model = Uri.parse(decodedUri),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
 //            modifier = Modifier.fillMaxSize(
 //                .padding(16.dp)
 //                .clip(RoundedCornerShape(15.dp))

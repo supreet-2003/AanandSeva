@@ -44,6 +44,7 @@ data class comments (
 data class Order (
     val _id: String,
     val file: orderFile,
+    var imageStorageLink: String,
     val comments : Array<comments>,
     val orderedBy: String,
     val orderedOn: String,

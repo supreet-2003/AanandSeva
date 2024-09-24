@@ -48,30 +48,26 @@ fun MedPop(
     val apiClient = remember { ApiClient() }
 
     fun handleFileUpload() {
-        println("Image picked: $isImagePicked")
 
         if (isImagePicked) {
-            println("Actual file----: $imageFilePath")
-
             GlobalScope.launch(Dispatchers.Main) {
                 val uploadedFile = uploadFileToGoogleDrive(driveService, imageFilePath?.imagePath, null)
-                println("------uploaded file------------$uploadedFile")
                 uploadedFile?.let {
                     println("File uploaded successfully!")
                     println("File ID: ${it.id}")
                     println("Web View Link: ${it.webViewLink}")
                     makeFilePublic(driveService, it.id)
+                    val link = it.webViewLink
+                    val name = it.id
+                    try {
+                        val json = """{"file": { "fileName": "$name", "url": "$link"}, "comments": {"text":"$text","date":"","commentedBy":"$userName"}, "orderedBy": "$userName", "orderedOn": "", "orderType": "medicine", "orderStatus": "Ordered"}"""
+                        val response = apiClient.saveOrder(json)
+                        println("Response: $response")
+                    } catch (e: Exception) {
+                        println("Error: $e.message")
+                    }
                 } ?: println("File upload failed!")
 
-                val link = "https://drive.google.com/file/d/1HM1QsZ2Td8m3TvekQiYnwUhmyky-hXOT/view"
-                val name = "10100000657.jpeg"
-                try {
-                    val json = """{"file": { "fileName": "$name", "url": "$link"}, "comments": {"text":"$text","date":"","commentedBy":"$userName"}, "orderedBy": "$userName", "orderedOn": "", "orderType": "medicine", "orderStatus": "Ordered"}"""
-                    val response = apiClient.saveOrder(json)
-                    println("Response: $response")
-                } catch (e: Exception) {
-                    println("Error: $e.message")
-                }
             }
         }
     }

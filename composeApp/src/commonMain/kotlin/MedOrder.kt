@@ -26,7 +26,6 @@ import org.example.anandsevakmp.ImageDisplayScreen
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun MedOrder(index:Int,order: Order) {
-    val textInput = order.comments[0].text;
      Box(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -36,13 +35,9 @@ fun MedOrder(index:Int,order: Order) {
         ) {
 
             Column(modifier = Modifier.padding(8.dp)) {
-
-//                val imageUriState = viewModel.imageData.collectAsState()
-//                    imageUriState.value?.let { imageUri ->
-//                        ImageDisplayScreen(navController = null, imageUri = imageUri.imagePath)
-//                    }
+                ImageDisplayScreen(navController = null, imageUri = order.imageStorageLink)
                 OutlinedTextField(
-                    value = textInput, onValueChange = {}, readOnly = true,
+                    value = order.comments[0].text, onValueChange = {}, readOnly = true,
                     modifier = Modifier.fillMaxWidth().height(500.dp),
                 )
             }
@@ -54,8 +49,9 @@ fun MedOrder(index:Int,order: Order) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MedList(orderData: List<Order>?){
+    println("med lis----$orderData")
     val pagerState = rememberPagerState(pageCount = {
-        10
+        orderData?.size ?: 0
     })
     HorizontalPager(state = pagerState) { page ->
         orderData?.get(page)?.let { MedOrder(page, it) }

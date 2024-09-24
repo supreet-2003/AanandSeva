@@ -65,7 +65,7 @@ import kotlinx.coroutines.launch
     return try {
         val response = apiClient.fetchMedicineOrders()
         processOrders(response, driveService)
-        println("Response: $response")
+        println("Response of fetch medicines: $response")
         response
     } catch (e: Exception) {
         println("Error: ${e.message}")

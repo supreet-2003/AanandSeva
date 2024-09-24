@@ -43,13 +43,13 @@ fun MedPop(
     viewModel: ImagePickerViewModel,
 ) {
     var text by remember { mutableStateOf("") }
-    val isImagePicked by viewModel.isImagePicked.collectAsState()
     val imageFilePath by viewModel.imageData.collectAsState()
     val apiClient = remember { ApiClient() }
+    val isImagepicked by viewModel.isImagePicked.collectAsState()
 
     fun handleFileUpload() {
 
-        if (isImagePicked) {
+        if (isImagepicked) {
             GlobalScope.launch(Dispatchers.Main) {
                 val uploadedFile = uploadFileToGoogleDrive(driveService, imageFilePath?.imagePath, null)
                 uploadedFile?.let {
@@ -86,10 +86,11 @@ fun MedPop(
                 ) {
                     Text(
                         "Upload Your Image",
+                        modifier = Modifier.align(Alignment.CenterVertically),
                         fontWeight = FontWeight.Bold
                     )
 
-                    if (isImagePicked) {
+                    if (isImagepicked) {
                         Icon(
                             imageVector = Icons.Default.CheckCircle,
                             contentDescription = "Uploaded",
@@ -105,7 +106,7 @@ fun MedPop(
                             },
                             shape = RoundedCornerShape(15.dp),
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color.Blue,
+                                backgroundColor = AppColors.SoftPurple,
                                 contentColor = Color.White
                             )
                         ) {

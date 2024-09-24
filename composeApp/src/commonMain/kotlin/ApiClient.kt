@@ -49,7 +49,7 @@ data class Order (
     val orderedBy: String,
     val orderedOn: String,
     val orderType: String,
-    val orderStatus: String
+    var orderStatus: String
 )
 
 class ApiClient {

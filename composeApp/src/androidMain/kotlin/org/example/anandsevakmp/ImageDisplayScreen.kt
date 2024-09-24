@@ -2,7 +2,6 @@ package org.example.anandsevakmp
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -28,20 +27,17 @@ actual fun  ImageDisplayScreen(navController: NavController?, imageUri: String?)
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(280.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .height(230.dp)
+            .clip(RoundedCornerShape(6.dp))
 
     ) {
         if (imageUri != null) {
-             AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(imageUri)
-                .crossfade(true)
-                .build(),
-            contentDescription = "Image",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
+            val decodedUri = Uri.decode(imageUri)
+            AsyncImage(
+                model = Uri.parse(decodedUri),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+            )
         } else {
             Text("Please try again later...")
         }

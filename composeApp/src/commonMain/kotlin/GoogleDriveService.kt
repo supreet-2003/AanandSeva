@@ -46,6 +46,7 @@ suspend fun makeFilePublic(service: Drive, fileId: String) {
 }
 
 suspend fun uploadFileToGoogleDrive(service: Drive, filePath: String?, folderId: String? = null): File? {
+    loading.value = true
     return withContext(Dispatchers.IO) {
         try {
             // Check if file exists
@@ -116,6 +117,7 @@ fun isImageInCache(fileName: String, cacheDir: String): Boolean {
 }
 
 suspend fun processOrders(orders: List<Order>?, driveService: Drive) {
+    loading.value = true
     val cacheDir = getCacheDirectory()
 
     if (orders != null) {

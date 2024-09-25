@@ -141,7 +141,7 @@ fun HomeScreen(navController: NavHostController) {
                         painter = painterResource(Res.drawable.medicine),
                         contentDescription = null,
                         modifier = Modifier.size(40.dp).clickable(onClick = {
-                            navController.navigate("screen5")
+                            navController.navigate("screen5/true")
                         })
                     )
                     Image(

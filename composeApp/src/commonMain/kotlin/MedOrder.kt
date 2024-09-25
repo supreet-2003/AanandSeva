@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -36,6 +37,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -113,10 +115,7 @@ fun MedOrder(index:Int,order: Order,navController: NavController) {
                         )
                     }
                 }
-
                 ImageDisplayScreen(navController = null, imageUri = order.imageStorageLink)
-
-               
             }
                 Column {
                     //Comment Bar
@@ -127,7 +126,6 @@ fun MedOrder(index:Int,order: Order,navController: NavController) {
                         modifier = Modifier.fillMaxWidth().heightIn(min=10.dp, max=200.dp),
                         shape = RoundedCornerShape(6.dp)
                     )
-
 
                     //Comment Adding Bar
                     val searchText = remember { mutableStateOf(TextFieldValue("")) }
@@ -168,12 +166,25 @@ fun MedOrder(index:Int,order: Order,navController: NavController) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MedList(orderData: List<Order>?){
-    println("med lis----$orderData")
-    val navController = rememberNavController()
-    val pagerState = rememberPagerState(pageCount = {
-        orderData?.size ?: 0
-    })
-    HorizontalPager(state = pagerState) { page ->
-        orderData?.get(page)?.let { MedOrder(page, it,  navController = navController) }
+    if(loading.value || refreshData.value == "false"){
+       LoadingScreen()
+    } else if (orderData != null) {
+        if(orderData.size === 0) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),  // Make the Box fill the entire screen
+                contentAlignment = Alignment.Center  // Center the content inside the Box
+            ) {
+                Text("No Past Orders. \nClick on the 'Add' button to order")
+            }
+        } else {
+            val navController = rememberNavController()
+            val pagerState = rememberPagerState(pageCount = {
+                orderData?.size ?: 0
+            })
+            HorizontalPager(state = pagerState) { page ->
+                orderData?.get(page)?.let { MedOrder(page, it,  navController = navController) }
+            }
+        }
     }
 }

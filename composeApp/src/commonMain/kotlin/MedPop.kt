@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 val driveService = getGoogleDriveService()
 
@@ -48,26 +49,36 @@ fun MedPop(
     val isImagepicked by viewModel.isImagePicked.collectAsState()
 
     fun handleFileUpload() {
+        navController.navigate("screen5/false")
+        runBlocking {
+            loading.value = true
+            if (isImagepicked) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    val uploadedFile =
+                        uploadFileToGoogleDrive(driveService, imageFilePath?.imagePath, null)
+                    uploadedFile?.let {
+                        println("File uploaded successfully!")
+                        println("File ID: ${it.id}")
+                        println("Web View Link: ${it.webViewLink}")
+                        makeFilePublic(driveService, it.id)
+                        val link = it.webViewLink
+                        val name = it.id
+                        try {
+                            runBlocking {
+                                val json =
+                                    """{"file": { "fileName": "$name", "url": "$link"}, "comments": {"text":"$text","date":"","commentedBy":"$userName"}, "orderedBy": "$userName", "orderedOn": "", "orderType": "medicine", "orderStatus": "Ordered"}"""
+                                val response = listOf(apiClient.saveOrder(json))
+                                _medicineOrders.value = fetchMedicineOrders(apiClient)
+                            }
+                            loading.value = false
+                            refreshData.value = "true"
+                            viewModel.resetImagePicked()
+                        } catch (e: Exception) {
+                            println("Error: $e")
+                        }
+                    } ?: println("File upload failed!")
 
-        if (isImagepicked) {
-            GlobalScope.launch(Dispatchers.Main) {
-                val uploadedFile = uploadFileToGoogleDrive(driveService, imageFilePath?.imagePath, null)
-                uploadedFile?.let {
-                    println("File uploaded successfully!")
-                    println("File ID: ${it.id}")
-                    println("Web View Link: ${it.webViewLink}")
-                    makeFilePublic(driveService, it.id)
-                    val link = it.webViewLink
-                    val name = it.id
-                    try {
-                        val json = """{"file": { "fileName": "$name", "url": "$link"}, "comments": {"text":"$text","date":"","commentedBy":"$userName"}, "orderedBy": "$userName", "orderedOn": "", "orderType": "medicine", "orderStatus": "Ordered"}"""
-                        val response = apiClient.saveOrder(json)
-                        println("Response: $response")
-                    } catch (e: Exception) {
-                        println("Error: $e.message")
-                    }
-                } ?: println("File upload failed!")
-
+                }
             }
         }
     }
@@ -102,7 +113,6 @@ fun MedPop(
                             modifier = Modifier.wrapContentSize(),
                             onClick = {
                                 navController.navigate("imagepicker")
-                                handleFileUpload()
                             },
                             shape = RoundedCornerShape(15.dp),
                             colors = ButtonDefaults.buttonColors(
@@ -138,8 +148,6 @@ fun MedPop(
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.padding(end = 8.dp),
                 onClick = {
-                    onOrderClick()
-                    onDismiss()
                     handleFileUpload()
                 }
             ) {

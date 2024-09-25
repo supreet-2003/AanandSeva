@@ -100,7 +100,7 @@ fun LabTest(navController: NavHostController) {
                             modifier = Modifier.size(50.dp).padding(vertical = 5.dp)
                                 .clickable(
                                     onClick = {
-                                        navController.navigate("screen5 ")
+                                        navController.navigate("screen5/true")
 
                                     }
                                 )
@@ -144,7 +144,7 @@ fun LabTest(navController: NavHostController) {
                     Image(
                         painterResource(Res.drawable.medicine), contentDescription = null,
                         modifier = Modifier.size(40.dp).clickable(onClick = {
-                            navController.navigate("screen5")
+                            navController.navigate("screen5/true")
                         })
                     )
                     Image(

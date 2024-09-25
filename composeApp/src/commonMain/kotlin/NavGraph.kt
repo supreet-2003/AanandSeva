@@ -29,7 +29,15 @@ fun Navigation(viewModel: ImagePickerViewModel) {
         ) { backStackEntry ->
             UserDetails(navController,backStackEntry.arguments?.getString("id")!!)
         }
-            composable("screen5") { MedScreen(navController,viewModel) }
+        composable(
+            "screen5/{fetchData}",
+            arguments = listOf(
+                navArgument("fetchData") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val fetchData = backStackEntry.arguments?.getString("fetchData")!!
+            MedScreen(navController, fetchData)
+        }
         composable(
             "screen7/{contact}/{otp}",
             arguments = listOf(

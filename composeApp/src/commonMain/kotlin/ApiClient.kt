@@ -45,7 +45,7 @@ data class Order (
     val _id: String,
     val file: orderFile,
     var imageStorageLink: String,
-    val comments : Array<comments>,
+    var comments : Array<comments>,
     val orderedBy: String,
     val orderedOn: String,
     val orderType: String,
@@ -144,7 +144,7 @@ class ApiClient {
     }
 
     @OptIn(InternalAPI::class)
-    suspend fun updateOrder(id:String,value: String, field: String): Any? {
+    suspend fun updateOrder(id:String,value: Any, field: String): Any? {
         return try {
             val response = client.put("http://$ip:4000/orders/$id/$field/$value") {
                 contentType(ContentType.Application.Json)

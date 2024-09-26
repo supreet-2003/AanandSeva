@@ -165,7 +165,6 @@ fun OtpScreen(
             verticalAlignment = Alignment.CenterVertically
         ){
             Text("Didn't Receive Code? ",)
-
             Text("Resend Again", color = AppColors.SoftPurple,fontWeight = FontWeight.SemiBold,)
         }
     }
@@ -189,77 +188,6 @@ fun OtpBox(
             .background(AppColors.Background),
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        shape = RoundedCornerShape(10.dp),
-
-
+        shape = RoundedCornerShape(10.dp)
     )
 }
-
-
-//
-//    @Composable
-//    fun OtpDialog(phoneNumber: String, onOtpGenerated: (String) -> Unit, onDismiss: () -> Unit) {
-////        var otp by remember { mutableStateOf("") }
-////        val lastFourDigits =
-////            if (phoneNumber.length >= 4) phoneNumber.substring(phoneNumber.length - 4) else ""
-////
-////        LaunchedEffect(key1 = Unit) {
-////            otp = generateOtp()
-////            onOtpGenerated(otp)
-////        }
-//
-//        Dialog(onDismissRequest = onDismiss) {
-//            Card(elevation = 8.dp) {
-//                Column(
-//                    modifier = Modifier
-//                        .padding(16.dp)
-//                        .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
-//                ) {
-//                    Text(
-//                        text = "OTP Verification",
-//                        style = MaterialTheme.typography.h6,
-//                        fontWeight = FontWeight.Bold
-//                    )
-//                    Spacer(modifier = Modifier.height(16.dp))
-//                    Text(
-//                        text = "Enter the OTP sent to **** **** ",
-//                        style = MaterialTheme.typography.body1
-//                    )
-//                    Spacer(modifier = Modifier.height(16.dp))
-//                    Text(
-//                        text = "",
-//                        style = MaterialTheme.typography.h4,
-//                        fontWeight = FontWeight.Bold
-//                    )
-//                    Spacer(modifier = Modifier.height(16.dp))
-//                    Button(onClick = onDismiss) {
-//                        Text("OK")
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    @Composable
-//    fun OtpDialogScreen(phoneNumber: String) {
-//        var showOtpDialog by remember { mutableStateOf(true) } // Initially show the dialog
-//        var generatedOtp by remember { mutableStateOf("") }
-//
-//        if (showOtpDialog) {
-//            OtpDialog(
-//                phoneNumber = phoneNumber,
-//                onOtpGenerated = { generatedOtp = it },
-//                onDismiss = { showOtpDialog = false }
-//            )
-//        }
-//
-//        // You can display the generated OTP or use it for verification here
-//        Text("Generated OTP: $generatedOtp")
-//    }
-
-//    private fun generateOtp(): String {
-//        return Random.nextInt(1000, 9999).toString()
-//    }
-
-
-

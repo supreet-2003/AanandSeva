@@ -47,20 +47,32 @@ import androidx.compose.ui.unit.max
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.example.anandsevakmp.ImageDisplayScreen
 
+suspend fun updateOrderStatus(apiClient: ApiClient, order: Order, value: String): Any? {
+    return try {
+        var response = apiClient.updateOrder(order._id , order.orderStatus,"orderStatus")
+        response
+    } catch (e: Exception) {
+        println("Error: ${e.message}")
+        null
+    }
+}
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun MedOrder(index:Int,order: Order,navController: NavController) {
     val textInput = order.comments[0].text
     var selectedOption by remember { mutableStateOf("Status") }
-    val selectedStatus = order.orderStatus
+    var selectedStatus by remember { mutableStateOf(order.orderStatus) }
 
     var dropdown by remember { mutableStateOf(false) }
     var options = listOf("Ordered", "Processing", "Cancelled", "Completed")
-    var commentText by remember { mutableStateOf("") }
     var commentList by remember { mutableStateOf(listOf<String>()) }
+    val apiClient = remember { ApiClient() }
+    val coroutineScope = rememberCoroutineScope()
 
     if (textInput.isNotBlank() && !commentList.contains(textInput)) {
         commentList = commentList + textInput
@@ -81,7 +93,11 @@ fun MedOrder(index:Int,order: Order,navController: NavController) {
                 ) {
                 Column{
                 Button(
-                    onClick = { dropdown = true },
+                    onClick = {
+                        if (userType == "Compounder") {
+                            dropdown = true
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = when (selectedStatus) {
                             "Cancelled" -> Color(0xFFC7253E)
@@ -98,25 +114,28 @@ fun MedOrder(index:Int,order: Order,navController: NavController) {
 
                 DropdownMenu(
                     modifier = Modifier
-                        .width(150.dp)
-                    ,
+                        .width(150.dp),
                     expanded = dropdown,
                     onDismissRequest = { dropdown = false }
-
                 ) {
                     options.forEach { option ->
                         DropdownMenuItem(
                             onClick = {
                                 order.orderStatus = option
+                                selectedStatus = option
                                 selectedOption = option
+                                coroutineScope.launch { updateOrderStatus(apiClient,order,"status") }
                                 dropdown = false
                             },
                             text = { Text(option) }
                         )
                     }
                 }
-                ImageDisplayScreen(navController = null, imageUri = order.imageStorageLink)
+                if(userType == "Compounder") {
+                    Text("Ordered By: ${order.orderedBy}")
+                }
             }
+                ImageDisplayScreen(navController = null, imageUri = order.imageStorageLink)
                 Column {
                     //Comment Bar
                     OutlinedTextField(

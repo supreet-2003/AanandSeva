@@ -46,18 +46,18 @@
     import kotlinx.coroutines.runBlocking
 
     suspend fun fetchMedicineOrders(apiClient: ApiClient): List<Order>? {
-    return try {
-        var response : List<Order>? = listOf()
-        runBlocking {
-            response = apiClient.fetchMedicineOrders()
-            processOrders(response, driveService)
+        return try {
+            var response : List<Order>? = listOf()
+            runBlocking {
+                response = apiClient.fetchMedicineOrders()
+                processOrders(response, driveService)
+            }
+            response
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
         }
-        response
-    } catch (e: Exception) {
-        println("Error: ${e.message}")
-        null
     }
-}
 
     val _medicineOrders = mutableStateOf<List<Order>?>(emptyList())
     val loading = mutableStateOf<Boolean>(value = true)
@@ -157,13 +157,15 @@
 
                     },
                     floatingActionButton = {
-                        FloatingActionButton(
+                        if(userType === "User"){
+                            FloatingActionButton(
                                 onClick = {
                                     navController.navigate("medpop")
                                 },
-                            backgroundColor = AppColors.Background,
-                        ) {
-                            Icon(Icons.Filled.AddCircle, contentDescription = "Add")
+                                backgroundColor = AppColors.Background,
+                            ) {
+                                Icon(Icons.Filled.AddCircle, contentDescription = "Add")
+                            }
                         }
                     },
                     floatingActionButtonPosition = FabPosition.End

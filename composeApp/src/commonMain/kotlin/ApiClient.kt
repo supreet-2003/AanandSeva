@@ -143,6 +143,26 @@ class ApiClient {
         }
     }
 
+    @OptIn(InternalAPI::class)
+    suspend fun updateOrder(id:String,value: String, field: String): Any? {
+        return try {
+            val response = client.put("http://$ip:4000/orders/$id/$field/$value") {
+                contentType(ContentType.Application.Json)
+            }
+            if (response.status == HttpStatusCode.OK) {
+                val responseBody = response.bodyAsText()
+                return responseBody
+            } else {
+                println("Error: ${response.status}")
+                null
+            }
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
+    }
+
+
     suspend fun fetchAllDoctors(): List<Doctor>? {
         return try {
             val response: HttpResponse = client.get(url = Url("http://$ip:4000/doctors"))
@@ -164,7 +184,7 @@ class ApiClient {
 
     suspend fun fetchMedicineOrders(): List<Order>? {
         return try {
-            val response: HttpResponse = client.get(url = Url("http://$ip:4000/orders"))
+            val response: HttpResponse = client.get(url = Url("http://$ip:4000/orders/$userName/$userType"))
             if (response.status == HttpStatusCode.OK) {
                 val responseBody = response.bodyAsText()
                 val gson = Gson()
@@ -172,7 +192,7 @@ class ApiClient {
                 val orders: List<Order> = gson.fromJson(responseBody, itemType)
                 return orders
             } else {
-                println("Error: ${response.status}")
+                println("Error from fetch medicines: ${response.status}$userType$userName")
                 return null
             }
         } catch (e: Exception) {

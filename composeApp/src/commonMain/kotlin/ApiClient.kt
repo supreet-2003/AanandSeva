@@ -96,7 +96,7 @@ class ApiClient {
     }
 
     @OptIn(InternalAPI::class)
-    suspend fun saveUserDetails(user: String, id: String): Any? {
+    suspend fun saveUserDetails(user: String, id: String): User? {
         return try {
             val user1 = Json.parseToJsonElement(user)
             val jsonString = Json.encodeToString(user1)
@@ -107,7 +107,10 @@ class ApiClient {
             }
             if (response.status == HttpStatusCode.OK) {
                 val responseBody = response.bodyAsText()
-                return responseBody
+                val gson = Gson()
+                val itemType = object : TypeToken<User>() {}.type
+                val user: User = gson.fromJson(responseBody, itemType)
+                return user
             } else {
                 println("Error: ${response.status}")
                 null

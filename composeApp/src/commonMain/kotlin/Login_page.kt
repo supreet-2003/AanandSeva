@@ -34,13 +34,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import com.russhwolf.settings.Settings
 
 val settings: Settings = Settings()
-fun storeToken(token: String, userName: String, userType: String){
-    if(token != null)
-        settings.putString("auth_token",token)
-    if(userName != null)
-     settings.putString("userName",userName)
-    if(userType != null)
-        settings.putString("userType",userType)
+fun storeCache(key: String, value: String){
+        settings.putString(key,value)
 }
 
 @Composable
@@ -52,12 +47,15 @@ fun App(navController: NavHostController) {
      suspend fun performLogin(phone: String): User? {
         try {
             val response = apiClient.login(phone)
-            if (response != null && response.authToken != null) {
-                if(response.name != null)
-                    storeToken(response.authToken, response.name, response.type)
-                else
-                    storeToken(response.authToken, "", "")
-             }
+            if(response != null) {
+                if (response.authToken != null) {
+                    storeCache("auth_token",response.authToken)
+                }
+                if(response.name != null && response.type != null) {
+                    storeCache("userName",response.name)
+                    storeCache("userType",response.type)
+                }
+            }
             return response
         } catch (e: Exception) {
             println("Error: $e.message")

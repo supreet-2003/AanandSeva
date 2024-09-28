@@ -40,16 +40,20 @@ fun UserDetails(navController: NavHostController,id: String) {
     val apiClient = remember { ApiClient() }
 
 
-    suspend fun saveUserDetails(name:String,age:String,address:String,bloodgroup:String,gender:String): Any? {
+    suspend fun saveUserDetails(name:String,age:String,address:String,bloodgroup:String,gender:String): User? {
         try {
             println("Id:$id")
             val json = """{"name": "$name", "type": "User", "bloodgroup": "$bloodgroup", "address": "$address", "age": "$age", "gender": "$gender"}"""
             val response = apiClient.saveUserDetails(json, id)
             println("Response: $response")
+            if(response != null && response.name != null && response.type != null){
+                storeCache("userName",response.name)
+                storeCache("userType",response.type)
+            }
             return response
         } catch (e: Exception) {
             println("Error: $e.message")
-            return {}
+            return null
         }
     }
     MaterialTheme(
@@ -92,8 +96,9 @@ fun UserDetails(navController: NavHostController,id: String) {
                         coroutineScope.launch {
                             val result = saveUserDetails(username,age,address,bloodgrp,gender)
                             println("Result: $result")
-                            if(result !== null)
-                             navController.navigate("screen2")
+                            if(result !== null){
+                                navController.navigate("screen2")
+                            }
                         }
                 }){
                     Text(text="Save Your Details")

@@ -11,11 +11,13 @@ import org.example.anandsevakmp.ImagePickerScreen
 val token: String = settings.getString("auth_token","")
 val userType: String = settings.getString("userType","")
 val userName: String = settings.getString("userName","")
+var id: String = settings.getString("contact","1")
+
 @Composable
 fun Navigation(viewModel: ImagePickerViewModel) {
     val navController = rememberNavController()
     val launchScreen: String
-    launchScreen = if(token === "")
+    launchScreen = if(token === "" || id == "" || userName == "")
         "screen1"
     else
         "screen2"

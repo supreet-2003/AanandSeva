@@ -154,11 +154,11 @@ class ApiClient {
                 return responseBody
             } else {
                 println("Error: ${response.status}")
-                null
+                 null
             }
         } catch (e: Exception) {
             println("Error: ${e.message}")
-            null
+             null
         }
     }
 
@@ -174,11 +174,11 @@ class ApiClient {
                 return doctors
             } else {
                 println("Error: ${response.status}")
-                return null
+                return listOf()
             }
         } catch (e: Exception) {
             println("Error: ${e.message}")
-            null
+            listOf()
         }
     }
 
@@ -193,11 +193,11 @@ class ApiClient {
                 return orders
             } else {
                 println("Error from fetch medicines: ${response.status}$userType$userName")
-                return null
+                return listOf()
             }
         } catch (e: Exception) {
             println("Error: ${e.message}")
-            null
+            listOf()
         }
     }
 }

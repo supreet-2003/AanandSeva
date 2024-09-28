@@ -2,12 +2,16 @@ import anandseva_kmp.composeapp.generated.resources.Res
 import anandseva_kmp.composeapp.generated.resources.flask
 import anandseva_kmp.composeapp.generated.resources.logo
 import anandseva_kmp.composeapp.generated.resources.medicine
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -25,34 +29,42 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.painterResource
 
 // Assuming this function is in a CoroutineScope
 suspend fun fetchAllDoctors(apiClient: ApiClient): List<Doctor>? {
     return try {
-        val response = apiClient.fetchAllDoctors()
-        println("Response: $response")
-        response
+            val response = apiClient.fetchAllDoctors()
+//        runBlocking {
+//            fetchDoctorImages(response, driveService)
+//        }
+            println("Response: $response")
+        loading.value= false
+            response
     } catch (e: Exception) {
         println("Error: ${e.message}")
         null
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(navController: NavHostController) {
     val coroutineScope = rememberCoroutineScope()
     val apiClient = remember { ApiClient() }
     var doctorsData by remember { mutableStateOf<List<Doctor>?>(null) }
+    var filteredDoctorsData by remember { mutableStateOf<List<Doctor>?>(null) }
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             doctorsData = fetchAllDoctors(apiClient)
+            println("doctorrrss$doctorsData")
         }
     }
 
     // Filtered list of doctors based on search text
-    val filteredDoctorsData = doctorsData?.filter { doctor ->
+     filteredDoctorsData = doctorsData?.filter { doctor ->
         doctor.name.contains(searchText.text, ignoreCase = true) ||
                 doctor.specialization.contains(searchText.text) ||
                 doctor.clinicAddress.contains(searchText.text, ignoreCase = true)
@@ -161,12 +173,30 @@ fun HomeScreen(navController: NavHostController) {
                     )
                 }
             }
-        ) { paddingValues ->
-            LazyColumn(modifier = Modifier.padding(paddingValues)) {
-                items(filteredDoctorsData ?: emptyList()) { doctor ->
-                    BaseList(doctor = doctor)
-                }
-            }
+        )
+      {
+          if(loading.value){
+              LoadingScreen()
+          } else if (doctorsData != null) {
+              if(doctorsData!!.size === 0) {
+                  Box(
+                      modifier = Modifier
+                          .fillMaxSize(),  // Make the Box fill the entire screen
+                      contentAlignment = Alignment.Center  // Center the content inside the Box
+                  ) {
+                      Text("No Doctors available")
+                  }
+              } else if(filteredDoctorsData!!.size != 0) {
+                  val finalData = if (doctorsData!!.size > 0) doctorsData else filteredDoctorsData
+                  val pagerState = rememberPagerState(pageCount = {
+                      finalData?.size ?: 0
+                  })
+
+                  VerticalPager(state = pagerState) { page ->
+                      finalData?.get(page)?.let { BaseList(doctor = it) }
+                  }
+              }
+          }
         }
     }
 }

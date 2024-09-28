@@ -35,9 +35,12 @@ import com.russhwolf.settings.Settings
 
 val settings: Settings = Settings()
 fun storeToken(token: String, userName: String, userType: String){
-    settings.putString("auth_token",token)
-    settings.putString("userName",userName)
-    settings.putString("userType",userType)
+    if(token != null)
+        settings.putString("auth_token",token)
+    if(userName != null)
+     settings.putString("userName",userName)
+    if(userType != null)
+        settings.putString("userType",userType)
 }
 
 @Composable
@@ -50,7 +53,10 @@ fun App(navController: NavHostController) {
         try {
             val response = apiClient.login(phone)
             if (response != null && response.authToken != null) {
-                 storeToken(response.authToken, response.name, response.type)
+                if(response.name != null)
+                    storeToken(response.authToken, response.name, response.type)
+                else
+                    storeToken(response.authToken, "", "")
              }
             return response
         } catch (e: Exception) {

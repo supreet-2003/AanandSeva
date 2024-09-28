@@ -52,6 +52,7 @@
                 response = apiClient.fetchMedicineOrders()
                 processOrders(response, driveService)
             }
+            println("resss$response")
             response
         } catch (e: Exception) {
             println("Error: ${e.message}")
@@ -157,7 +158,7 @@
 
                     },
                     floatingActionButton = {
-                        if(userType === "User"){
+                        if(userType == "User" && loading.value == false){
                             FloatingActionButton(
                                 onClick = {
                                     navController.navigate("medpop")

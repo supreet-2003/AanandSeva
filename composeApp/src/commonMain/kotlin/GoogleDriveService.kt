@@ -143,6 +143,35 @@ suspend fun processOrders(orders: List<Order>?, driveService: Drive) {
     }
 }
 
+suspend fun fetchDoctorImages(doctors: List<Doctor>?, driveService: Drive) {
+    loading.value = true
+    val cacheDir = getCacheDirectory()
+
+    if (doctors != null) {
+        for (doctor in doctors) {
+            val fileName = doctor.name
+            if(doctor.photo != null){
+                val fileId = extractFileIdFromUrl(doctor.photo)
+                val check = isImageInCache("$fileId.jpg", cacheDir)
+                // Check if image is already in cache
+                if (!check) {
+                    // If not, download the image from Google Drive
+                    val downloadedFile = downloadImageToCache(driveService, fileId, cacheDir)
+                    if (downloadedFile != null) {
+                        println("Doctor Image downloaded and saved to cache: ${downloadedFile.absolutePath}")
+                        doctor.photoStorageLink = downloadedFile.absolutePath
+                    } else {
+                        println("Failed to download image for doctor: ${doctor.name}")
+                    }
+                } else {
+                    println("Doctor Image already exists in cache: $fileName")
+                    doctor.photoStorageLink = "$cacheDir/$fileId.jpg"
+                }
+            }
+        }
+    }
+}
+
 // Utility function to get cache directory
 fun getCacheDirectory(): String {
     return System.getProperty("java.io.tmpdir") ?: "/tmp"

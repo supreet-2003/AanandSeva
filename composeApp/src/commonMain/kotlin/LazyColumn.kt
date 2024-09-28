@@ -18,20 +18,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
+import org.example.anandsevakmp.ImageDisplayScreen
+
 
 data class Doctor(
     val _id: String,
     val name: String,
     val clinicAddress: String,
+    val photo: String,
     val contactNumber: String,
     val specialization: List<String>,
     val fee: String,
-    val experience: Int
+    val experience: Int,
+    var photoStorageLink: String
 )
-
-@Composable
-fun DoctorListScreen(doctors: List<Doctor>) {
-}
 
 @Composable
 fun BaseList(doctor: Doctor) {
@@ -39,11 +39,17 @@ fun BaseList(doctor: Doctor) {
         Row(
             verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(8.dp)
         ) {
-            Image(
-                painterResource(Res.drawable.nophoto),
-                contentDescription = "Doctor Photo",
-                modifier = Modifier.size(90.dp).padding(8.dp)
-            )
+//            if(doctor.photo != null && doctor.photoStorageLink.length > 0)
+//            {
+//                println("----docotr photo link---${doctor.photoStorageLink}")
+//                ImageDisplayScreen(navController = null, imageUri = doctor.photoStorageLink)
+//            } else {
+                Image(
+                    painterResource(Res.drawable.nophoto),
+                    contentDescription = "Doctor Photo",
+                    modifier = Modifier.size(90.dp).padding(8.dp)
+                )
+//            }
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(text = doctor.name, style = MaterialTheme.typography.h5, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
                 Row {

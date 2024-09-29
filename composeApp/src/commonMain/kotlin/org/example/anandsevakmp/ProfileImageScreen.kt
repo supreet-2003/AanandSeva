@@ -8,3 +8,5 @@ expect fun ProfileImageScreen(
     navController: NavController?,
     imageUri: String?
 )
+
+expect fun dialPhoneNumber(phoneNumber: String)

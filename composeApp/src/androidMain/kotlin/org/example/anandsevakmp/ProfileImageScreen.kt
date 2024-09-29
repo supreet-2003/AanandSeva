@@ -1,7 +1,9 @@
 package org.example.anandsevakmp
 
+import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -19,16 +21,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import java.io.File
-import coil.request.ImageRequest
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 
 
 @Composable
 actual fun ProfileImageScreen(navController: NavController?, imageUri: String?) {
     Box(
         modifier = Modifier
-            .height(90.dp)
-            .width(70.dp)
+            .fillMaxSize()
             .clip(RoundedCornerShape(6.dp))
     ) {
         if (imageUri != null) {
@@ -43,3 +44,11 @@ actual fun ProfileImageScreen(navController: NavController?, imageUri: String?) 
         }
     }
 }
+
+actual fun dialPhoneNumber(phoneNumber: String) {
+    val intent = Intent(Intent.ACTION_DIAL).apply {
+        data = Uri.parse("tel:$phoneNumber")
+    }
+    ContextHolder.appContext.startActivity(intent)
+}
+

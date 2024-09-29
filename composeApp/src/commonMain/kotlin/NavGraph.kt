@@ -16,8 +16,7 @@ var id: String = settings.getString("contact","1")
 @Composable
 fun Navigation(viewModel: ImagePickerViewModel) {
     val navController = rememberNavController()
-    val launchScreen: String
-    launchScreen = if(token === "" || id == "" || userName == "")
+    val launchScreen: String = if(token === "" || id == "" || userName == "")
         "screen1"
     else
         "screen2"

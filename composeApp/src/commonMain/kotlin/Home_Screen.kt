@@ -36,9 +36,9 @@ import org.jetbrains.compose.resources.painterResource
 suspend fun fetchAllDoctors(apiClient: ApiClient): List<Doctor>? {
     return try {
             val response = apiClient.fetchAllDoctors()
-//        runBlocking {
-//            fetchDoctorImages(response, driveService)
-//        }
+        runBlocking {
+            fetchDoctorImages(response, driveService)
+        }
             println("Response: $response")
         loading.value= false
             response
@@ -173,8 +173,7 @@ fun HomeScreen(navController: NavHostController) {
                     )
                 }
             }
-        )
-      {
+        ) {
           if(loading.value){
               LoadingScreen()
           } else if (doctorsData != null) {
@@ -187,13 +186,12 @@ fun HomeScreen(navController: NavHostController) {
                       Text("No Doctors available")
                   }
               } else if(filteredDoctorsData!!.size != 0) {
-                  val finalData = if (doctorsData!!.size > 0) doctorsData else filteredDoctorsData
-                  val pagerState = rememberPagerState(pageCount = {
-                      finalData?.size ?: 0
-                  })
-
-                  VerticalPager(state = pagerState) { page ->
-                      finalData?.get(page)?.let { BaseList(doctor = it) }
+                  LazyColumn(
+                      modifier = Modifier.fillMaxSize(),
+                  ) {
+                      items(filteredDoctorsData!!) { doctor ->
+                          BaseList(doctor)  // Pass each doctor object to BaseList
+                      }
                   }
               }
           }

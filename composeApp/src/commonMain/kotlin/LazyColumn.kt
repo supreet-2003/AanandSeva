@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import org.example.anandsevakmp.ImageDisplayScreen
+import org.example.anandsevakmp.ProfileImageScreen
 
 
 data class Doctor(
@@ -39,38 +40,28 @@ fun BaseList(doctor: Doctor) {
         Row(
             verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(8.dp)
         ) {
-//            if(doctor.photo != null && doctor.photoStorageLink.length > 0)
-//            {
-//                println("----docotr photo link---${doctor.photoStorageLink}")
-//                ImageDisplayScreen(navController = null, imageUri = doctor.photoStorageLink)
-//            } else {
+            if(doctor.photo != null && doctor.photoStorageLink != null)
+            {
+                ProfileImageScreen(navController = null, imageUri = doctor.photoStorageLink)
+            } else {
                 Image(
                     painterResource(Res.drawable.nophoto),
                     contentDescription = "Doctor Photo",
                     modifier = Modifier.size(90.dp).padding(8.dp)
                 )
-//            }
+            }
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(text = doctor.name, style = MaterialTheme.typography.h5, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
-                Row {
-                    Text(
-                        text = doctor.specialization.joinToString(", "),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.CenterVertically)
-                    )
-                    Text(
-                        text = " | ",
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Thin
-                    )
-                    Text(
-                        text = "${doctor.experience} years experience",
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.align(Alignment.CenterVertically)
-                    )
-                }
+                Text(
+                    text = doctor.specialization.joinToString(", "),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = "${doctor.experience} years experience",
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.SemiBold,
+                )
                 Text(text = doctor.clinicAddress, fontSize = 12.sp, style = MaterialTheme.typography.subtitle2)
                 Text(text = "Fee: Rs.${doctor.fee}", fontSize = 11.sp, style = MaterialTheme.typography.subtitle2)
                 Text(text = "Contact: ${doctor.contactNumber}", fontSize = 12.sp, style = MaterialTheme.typography.subtitle2)

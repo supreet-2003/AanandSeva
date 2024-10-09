@@ -158,7 +158,7 @@
 
                     },
                     floatingActionButton = {
-                        if(userType == "User" && loading.value == false){
+                        if(userType != "Compounder" && loading.value == false){
                             FloatingActionButton(
                                 onClick = {
                                     navController.navigate("medpop")

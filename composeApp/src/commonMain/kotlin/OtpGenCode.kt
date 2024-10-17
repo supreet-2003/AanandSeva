@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -121,8 +122,8 @@ fun OtpScreen(
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(top=50.dp, start = 8.dp, end = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier.fillMaxWidth().padding(top=50.dp, start = 10.dp, end = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             for (i in 0 until 4) {
                 OtpBox(
@@ -137,7 +138,7 @@ fun OtpScreen(
                         }
                     },
                     focusRequester = focusRequesters[i],
-                    modifier = Modifier.weight(1f)
+//                    modifier = Modifier.weight(1f)
                 )
             }
         }
@@ -178,15 +179,19 @@ fun OtpBox(
     value: String,
     onValueChange: (String) -> Unit,
     focusRequester: FocusRequester,
-    modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier
-            .size(50.dp)
+        modifier = Modifier
+            .height(64.dp)
+            .width(56.dp)
             .focusRequester(focusRequester)
             .background(AppColors.Background),
+        textStyle = TextStyle(
+            fontSize = 24.sp,
+            textAlign = TextAlign.Center
+        ),
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         shape = RoundedCornerShape(10.dp)

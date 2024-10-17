@@ -84,7 +84,7 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.0")
             implementation("io.ktor:ktor-utils:2.3.4")
-
+//            implementation("org.jetbrains.compose.resources:resources:1.0.0")
             
         }
         desktopMain.dependencies {
@@ -155,6 +155,7 @@ android {
 dependencies {
     implementation(libs.gson)
     implementation(libs.play.services.cast.framework)
+    implementation(libs.androidx.material3.android)
 }
 
 //dependencies {

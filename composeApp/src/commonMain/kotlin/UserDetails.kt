@@ -86,10 +86,6 @@ fun UserDetails(navController: NavHostController,id: String) {
             val json = """{"name": "$name", "type": "User", "bloodgroup": "$bloodgroup", "address": "$address", "age": "$age", "gender": "$gender"}"""
             val response = apiClient.saveUserDetails(json, id)
             println("Response: $response")
-            if(response != null && response.name != null && response.type != null){
-                storeCache("userName",response.name)
-                storeCache("userType",response.type)
-            }
             return response
         } catch (e: Exception) {
             println("Error: $e.message")
@@ -131,7 +127,7 @@ fun UserDetails(navController: NavHostController,id: String) {
                 )
                 if (!isUsernameValid&&isFocused) {
                     Text(
-                        "Name must be at least 3 characters",
+                        "Name must not be empty",
                         color = Color.Red,
                         fontSize = 12.sp,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -276,11 +272,20 @@ fun UserDetails(navController: NavHostController,id: String) {
                         coroutineScope.launch {
                             val result = saveUserDetails(username,age,address,bloodgrp,gender)
                             println("Result: $result")
+
+                            if(result != null && result.name != null && result.type != null){
+                                storeCache("userName",result.name)
+                                storeCache("userType",result.type)
+                                userName = result.name
+                                userType = result.type
+                            }
                             if(result !== null){
                                 navController.navigate("screen2")
                             }
                         }
-                }){
+                    },
+                    enabled = isUsernameValid
+                ){
                     Text(text="Save Your Details")
                 }
             }

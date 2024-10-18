@@ -47,15 +47,7 @@ fun App(navController: NavHostController) {
      suspend fun performLogin(phone: String): User? {
         try {
             val response = apiClient.login(phone)
-            if(response != null) {
-                if (response.authToken != null) {
-                    storeCache("auth_token",response.authToken)
-                }
-                if(response.name != null && response.type != null) {
-                    storeCache("userName",response.name)
-                    storeCache("userType",response.type)
-                }
-            }
+            println("ressoonse store token $response")
             return response
         } catch (e: Exception) {
             println("Error: $e.message")
@@ -153,6 +145,19 @@ fun App(navController: NavHostController) {
                             coroutineScope.launch {
                                 val result = performLogin(phone)
                                 println("Result: $result")
+
+                                if(result != null) {
+                                    if (result.authToken != null) {
+                                        storeCache("auth_token",result.authToken)
+                                        token = result.authToken
+                                    }
+                                    if(result.name != null && result.type != null) {
+                                        storeCache("userName",result.name)
+                                        storeCache("userType",result.type)
+                                        userName = result.name
+                                        userType = result.type
+                                    }
+                                }
                                 if(result !== null){
                                     if (!result.isVerified) {
                                         println("err $result")

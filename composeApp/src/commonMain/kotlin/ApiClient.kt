@@ -186,6 +186,7 @@ class ApiClient {
     }
 
     suspend fun fetchMedicineOrders(): List<Order>? {
+        println("---name, type $userName -----$userType")
         return try {
             val response: HttpResponse = client.get(url = Url("http://$ip:4000/orders/$userName/$userType"))
             if (response.status == HttpStatusCode.OK) {

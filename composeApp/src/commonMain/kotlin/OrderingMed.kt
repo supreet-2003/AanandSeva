@@ -48,10 +48,10 @@
     suspend fun fetchMedicineOrders(apiClient: ApiClient): List<Order>? {
         return try {
             var response : List<Order>? = listOf()
-            runBlocking {
+           
                 response = apiClient.fetchMedicineOrders()
                 processOrders(response, driveService)
-            }
+            
             println("resss$response")
             response
         } catch (e: Exception) {
@@ -73,10 +73,10 @@
             coroutineScope.launch {
                 refreshData.value = fetchData
                 if(fetchData !== "false"){
-                    runBlocking {
+                   
                         loading.value = true
                         _medicineOrders.value = fetchMedicineOrders(apiClient)
-                    }
+                    
                     loading.value = false
                 }
             }

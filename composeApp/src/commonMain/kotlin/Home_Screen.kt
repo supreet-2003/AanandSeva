@@ -36,9 +36,9 @@ import org.jetbrains.compose.resources.painterResource
 suspend fun fetchAllDoctors(apiClient: ApiClient): List<Doctor>? {
     return try {
             val response = apiClient.fetchAllDoctors()
-        runBlocking {
+
             fetchDoctorImages(response, driveService)
-        }
+
             println("Response: $response")
         loading.value= false
             response

@@ -1,18 +1,29 @@
     import anandseva_kmp.composeapp.generated.resources.Res
     import anandseva_kmp.composeapp.generated.resources.flask
+    import anandseva_kmp.composeapp.generated.resources.home_logo
+    import anandseva_kmp.composeapp.generated.resources.lab_logo
     import anandseva_kmp.composeapp.generated.resources.medicine
+    import anandseva_kmp.composeapp.generated.resources.order_logo
+    import anandseva_kmp.composeapp.generated.resources.profile_logo
     import androidx.compose.foundation.Image
     import androidx.compose.foundation.background
     import androidx.compose.foundation.clickable
     import androidx.compose.foundation.layout.Arrangement
+    import androidx.compose.foundation.layout.Box
     import androidx.compose.foundation.layout.Column
     import androidx.compose.foundation.layout.Row
     import androidx.compose.foundation.layout.Spacer
+    import androidx.compose.foundation.layout.WindowInsets
+    import androidx.compose.foundation.layout.WindowInsetsSides
     import androidx.compose.foundation.layout.fillMaxSize
     import androidx.compose.foundation.layout.fillMaxWidth
     import androidx.compose.foundation.layout.height
+    import androidx.compose.foundation.layout.only
     import androidx.compose.foundation.layout.padding
     import androidx.compose.foundation.layout.size
+    import androidx.compose.foundation.layout.systemBars
+    import androidx.compose.foundation.layout.windowInsetsPadding
+    import androidx.compose.foundation.shape.RoundedCornerShape
     import androidx.compose.material.FabPosition
     import androidx.compose.material.FloatingActionButton
     import androidx.compose.material.Icon
@@ -36,6 +47,7 @@
     import androidx.compose.ui.Modifier
     import androidx.compose.ui.graphics.Color
     import androidx.compose.ui.graphics.Shadow
+    import androidx.compose.ui.graphics.painter.Painter
     import androidx.compose.ui.text.TextStyle
     import androidx.compose.ui.text.font.FontWeight
     import androidx.compose.ui.unit.dp
@@ -83,7 +95,7 @@
         }
         MaterialTheme(
             lightColors(
-                background = AppColors.Background
+                background = AppColors.OffWhite
             )
         ) {
 
@@ -115,47 +127,55 @@
                             elevation = 4.dp
                         )
                     }, bottomBar = {
+                        val selectedTab = remember { mutableStateOf("orders") }
+
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .size(50.dp)
-                                .background(Color.White),
+                                .background(AppColors.OffWhite)
+                                .padding(8.dp)
+                                .padding(horizontal = 8.dp)
+                                .height(50.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.Bottom
                         ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Home,
-                                contentDescription = null,
-                                modifier = Modifier.size(40.dp).clickable(onClick = {
+                            BottomBarIcon1(
+                                painterResource(Res.drawable.home_logo),
+                                "home",
+                                selectedTab.value == "home",
+                                onClick = {
+                                    selectedTab.value = "home"
                                     navController.navigate("screen2")
-                                }),
-                                tint = Color.Gray
+                                }
                             )
-                            Image(
-                                painterResource(Res.drawable.medicine), contentDescription = null,
-                                modifier = Modifier.size(40.dp).clickable(onClick = { })
+                            BottomBarIcon1(
+                                painterResource(Res.drawable.order_logo),
+                                "orders",
+                                selectedTab.value == "orders",
+                                onClick = {
+                                    selectedTab.value = "orders"
+                                    navController.navigate("screen5/true")
+                                }
                             )
-                            Image(
-                                painterResource(Res.drawable.flask),
-                                contentDescription = "Lab Test",
-                                modifier = Modifier.size(40.dp)
-                                    .clickable
-                                        (
-                                        onClick = { navController.navigate("screen3") })
+                            BottomBarIcon1(
+                                painterResource(Res.drawable.lab_logo),
+                                "lab",
+                                selectedTab.value == "lab",
+                                onClick = {
+                                    selectedTab.value = "lab"
+                                    navController.navigate("screen3")
+                                }
                             )
-                            Icon(
-                                imageVector = Icons.Outlined.Person,
-                                contentDescription = null,
-                                tint = Color.Gray,
-                                modifier = Modifier.size(40.dp).clickable(onClick = {
-                                    navController.navigate("screen4")
-
-                                })
+                            BottomBarIcon1(
+                                painterResource(Res.drawable.profile_logo),
+                                "profile",
+                                selectedTab.value == "profile",
+                                onClick = {
+                                    selectedTab.value = "profile"
+                                    navController.navigate("userdetail")
+                                }
                             )
-
-
                         }
-
                     },
                     floatingActionButton = {
                         if(userType == "User" && loading.value == false){

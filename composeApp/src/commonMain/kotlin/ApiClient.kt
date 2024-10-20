@@ -54,7 +54,7 @@ data class Order (
 
 class ApiClient {
     private val client = HttpClient()
-    private val ip = "192.168.29.73"
+    private val ip = "192.168.4.189"
 
      suspend fun login(contactNumber: String): User? {
         return try {

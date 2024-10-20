@@ -24,4 +24,5 @@ object AppColors {
     val Olive = Color(0xFF378172)
     val OffWhite = Color(0xFFFDFBF7)
     val DarkOffWhite = Color(0xFFF3F2E9)
+    val Cyan=Color(0xFFAFF2F2)
 }

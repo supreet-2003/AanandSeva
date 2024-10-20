@@ -24,12 +24,21 @@ fun Navigation(viewModel: ImagePickerViewModel) {
         composable("screen1") { App(navController) }
         composable("screen2") { HomeScreen(navController) }
         composable("screen3") { LabTest(navController) }
+
+
         composable(
-            "screen4/{id}",
-            arguments = listOf(navArgument("id") { type = NavType.StringType })
-        ) { backStackEntry ->
-            UserDetails(navController,backStackEntry.arguments?.getString("id")!!)
+            "userdetail",
+//            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) {
+            UserDetails2(navController)
         }
+        composable(
+            "addressdetail",
+//            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) {
+            AddressDetails(navController)
+        }
+//        ,backStackEntry.arguments?.getString("id")!!
         composable(
             "screen5/{fetchData}",
             arguments = listOf(

@@ -21,6 +21,7 @@ import androidx.navigation.NavGraph
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.navigation.compose.rememberNavController
 
 object ContextHolder {
     lateinit var appContext: Context
@@ -41,6 +42,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppAndroidPreview() {
 //    ImagePicker()
-    Navigation(ImagePickerViewModel())
+//    Navigation(ImagePickerViewModel())
+App(navController = rememberNavController())
 }
 

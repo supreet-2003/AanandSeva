@@ -41,7 +41,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation("io.ktor:ktor-client-android:2.0.0")
             implementation("androidx.activity:activity-compose:1.6.1") // For ActivityResultContracts
-            implementation("io.coil-kt:coil-compose:2.2.2") // Or another image loading library
+            implementation("io.coil-kt:coil-compose:2.2.2")
             implementation("io.ktor:ktor-client-core:2.3.0") // Ktor for networking
             implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
             implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
@@ -51,7 +51,7 @@ kotlin {
             implementation ("com.russhwolf:multiplatform-settings-no-arg:1.0.0" )
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
-            implementation("io.coil-kt:coil-compose:2.7.0")
+//            implementation("io.coil-kt:coil-compose:2.7.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)

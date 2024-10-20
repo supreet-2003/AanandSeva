@@ -1,7 +1,11 @@
 import anandseva_kmp.composeapp.generated.resources.Res
 import anandseva_kmp.composeapp.generated.resources.flask
+import anandseva_kmp.composeapp.generated.resources.home_logo
+import anandseva_kmp.composeapp.generated.resources.lab_logo
 import anandseva_kmp.composeapp.generated.resources.logo
 import anandseva_kmp.composeapp.generated.resources.medicine
+import anandseva_kmp.composeapp.generated.resources.order_logo
+import anandseva_kmp.composeapp.generated.resources.profile_logo
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +25,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -42,11 +47,13 @@ suspend fun fetchAllDoctors(apiClient: ApiClient): List<Doctor>? {
             println("Response: $response")
         loading.value= false
             response
-    } catch (e: Exception) {
+    }
+    catch (e: Exception) {
         println("Error: ${e.message}")
         null
     }
 }
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -72,7 +79,7 @@ fun HomeScreen(navController: NavHostController) {
 
     MaterialTheme(
         colors = lightColors(
-            background = Color.White
+            background = AppColors.OffWhite
         )
     ) {
         Scaffold(
@@ -133,43 +140,54 @@ fun HomeScreen(navController: NavHostController) {
                 }
             },
             bottomBar = {
+                val selectedTab = remember { mutableStateOf("home") }
+
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .size(50.dp)
-                        .background(Color.White),
+                        .background(AppColors.OffWhite)
+                        .padding(8.dp)
+                        .padding(horizontal = 8.dp)
+                        .height(50.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Home,
-                        contentDescription = null,
-                        modifier = Modifier.size(40.dp).clickable(onClick = {
-                            // Handle navigation or state change
-                        }),
-                        tint = Color.Gray
+                    BottomBarIcon1(
+                        painterResource(Res.drawable.home_logo),
+                        "home",
+                        selectedTab.value == "home",
+                        onClick = {
+                            selectedTab.value = "home"
+                            navController.navigate("screen2")
+                        }
                     )
-                    Image(
-                        painter = painterResource(Res.drawable.medicine),
-                        contentDescription = null,
-                        modifier = Modifier.size(40.dp).clickable(onClick = {
+                    BottomBarIcon1(
+                        painterResource(Res.drawable.order_logo),
+                        "orders",
+                        selectedTab.value == "orders",
+                        onClick = {
+                            selectedTab.value = "orders"
                             navController.navigate("screen5/true")
-                        })
+                        }
                     )
-                    Image(
-                        painter = painterResource(Res.drawable.flask),
-                        contentDescription = "Lab Test",
-                        modifier = Modifier.size(40.dp).clickable(onClick = {
+                    BottomBarIcon1(
+                        painterResource(Res.drawable.lab_logo),
+                        "lab",
+                        selectedTab.value == "lab",
+                        onClick = {
+                            selectedTab.value = "lab"
                             navController.navigate("screen3")
-                        })
+                        }
                     )
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = null,
-                        modifier = Modifier.size(40.dp).clickable(onClick = {
-                            // Handle navigation or state change
-                        }),
-                        tint = Color.Gray
+                    BottomBarIcon1(
+                        painterResource(Res.drawable.profile_logo),
+                        "profile",
+                        selectedTab.value == "profile",
+                        onClick = {
+                            selectedTab.value = "profile"
+                            navController.navigate("userdetail")
+                        }
                     )
                 }
             }
@@ -195,6 +213,37 @@ fun HomeScreen(navController: NavHostController) {
                   }
               }
           }
+        }
+    }
+
+
+}
+
+
+@Composable
+fun BottomBarIcon1(
+    painter: Painter,
+    tab: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Bottom,
+        modifier = Modifier.clickable(onClick = onClick)
+    ) {
+        Image(
+            painter = painter,
+            contentDescription = null,
+            modifier = Modifier.size(40.dp)
+        )
+        if (isSelected) {
+            Spacer(modifier = Modifier.height(1.dp))
+            Box(
+                modifier = Modifier
+                    .size(4.dp)
+                    .background(AppColors.SoftPurple, RoundedCornerShape(50))
+            )
         }
     }
 }

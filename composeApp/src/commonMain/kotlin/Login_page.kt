@@ -4,8 +4,10 @@ import anandseva_kmp.composeapp.generated.resources.google
 import anandseva_kmp.composeapp.generated.resources.logo
 import anandseva_kmp.composeapp.generated.resources.twitter
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,6 +24,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -65,18 +69,20 @@ fun App(navController: NavHostController) {
             background = AppColors.Background
         )
     ) {
-        Surface(
-            color = MaterialTheme.colors.background
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .background(
+                    brush = Brush.linearGradient(
+                        colors = listOf(Color(0xFFAFF2F2), Color(0xFF194B88))
+                    )
+                ),
+
+
         ) {
-//            Box(
-//                modifier = Modifier.background(Color.Blue)
-//            ) {
-
-
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(40.dp),
+                        .padding(30.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.Top,
                 ) {
@@ -85,26 +91,39 @@ fun App(navController: NavHostController) {
                         contentDescription = "Login logo",
                         modifier = Modifier.size(70.dp)
                     )
-                    Text(
-                        modifier = Modifier.fillMaxWidth().padding(10.dp),
-                        text = "AanandSeva",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 35.sp,
+                    Column (verticalArrangement = Arrangement.SpaceAround){
+                        Text(
+                            modifier = Modifier.fillMaxWidth().padding(10.dp),
+                            text = "AanandSeva",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 35.sp,
 
-                    )
+                            )
+                        Text(
+                            text = "Where Health Meets Convenience.",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = AppColors.SoftPurple,
+//                            modifier = Modifier.padding(top = 8.dp)
+                        )
+                    }
                 }
+
 
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 150.dp),
+                        .padding(top = 150.dp, bottom = 50.dp),
 
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
+//                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Welcome Back", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.padding(5.dp))
-                    Text(text = "Login to Your Account",)
-                    Spacer(modifier = Modifier.padding(5.dp))
+                    Text(text = "Welcome Back", fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 8.dp))
+                    Text(text = "Login to Your Account",fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(bottom = 70.dp))
+                    Column(horizontalAlignment = Alignment.Start) {
+                     Text(text = "  Phone number", fontWeight = FontWeight.ExtraBold,fontSize = 18.sp)
+
+                    var isFocused by remember { mutableStateOf(false) }
 
                     OutlinedTextField(
                         value = phone,
@@ -114,10 +133,23 @@ fun App(navController: NavHostController) {
                             }
                             isValidPhone = phone.length == 10
                         },
-                        label = { Text(text = "Enter Your Phone Number") },
+                        placeholder = { Text(text = "Enter Your Phone Number") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                        isError = !isValidPhone
+                        isError = !isValidPhone,
+                        modifier = Modifier
+                            .onFocusChanged { focusState ->
+                                isFocused = focusState.isFocused
+                            }
+                            .fillMaxWidth(0.9f).padding(bottom = 20.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            backgroundColor = if (isFocused) Color.White else Color.LightGray,
+                            focusedBorderColor = MaterialTheme.colors.primary,
+                            unfocusedBorderColor = Color.Gray,
+                            textColor = Color.Black
+                        ),
+                        shape = RoundedCornerShape(10.dp)
                     )
+
 
                     if (!isValidPhone && phone.isNotEmpty()) {
                         Text(
@@ -126,19 +158,7 @@ fun App(navController: NavHostController) {
                         )
                     }
 
-                    Spacer(modifier = Modifier.padding(5.dp))
-//                    OutlinedTextField(
-//                        value = pass,
-//                        onValueChange = {
-//                            pass = it
-//                        },
-//                        label = { Text(text = "Password") },
-//                        visualTransformation = PasswordVisualTransformation()
-//                    )
 //                    Spacer(modifier = Modifier.padding(5.dp))
-
-
-
                     Button(colors = ButtonDefaults.buttonColors(backgroundColor = AppColors.SoftPurple,contentColor = Color.White)
                        , shape = RoundedCornerShape(10.dp),
                         onClick = {
@@ -175,38 +195,19 @@ fun App(navController: NavHostController) {
                                 }
                             }
                         },
-                        enabled = isValidPhone && phone.isNotEmpty()
+                        enabled = isValidPhone && phone.isNotEmpty(),
+                        modifier = Modifier.fillMaxWidth(0.8f).align(Alignment.CenterHorizontally),
                     ) {
                         Text(text = "Login")
                     }
                     Spacer(modifier = Modifier.padding(10.dp))
                     Text(
                         text = "Forgot Password?",
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.clickable { })
-                    Spacer(modifier = Modifier.padding(25.dp))
-                    Text(text = "Or Sign In With")
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        Image(
-                            painter = painterResource(Res.drawable.facebook), modifier = Modifier
-                                .size(45.dp)
-                                .clickable { }, contentDescription = "facebook logo"
+                        fontWeight = FontWeight.ExtraBold,
+                        modifier = Modifier.clickable { }.align(Alignment.End),
                         )
-                        Image(
-                            painter = painterResource(Res.drawable.twitter), modifier = Modifier
-                                .size(45.dp)
-                                .clickable { }, contentDescription = "twitter logo"
-                        )
-                        Image(
-                            painter = painterResource(Res.drawable.google), modifier = Modifier
-                                .size(45.dp)
-                                .clickable { }, contentDescription = "google logo"
-                        )
-                    }
+                        }
+
                 }
             }
         }

@@ -20,16 +20,31 @@ fun Navigation(viewModel: ImagePickerViewModel) {
         "screen1"
     else
         "screen2"
+    println("launch screen---$launchScreen")
     NavHost(navController = navController, startDestination = launchScreen) {
         composable("screen1") { App(navController) }
         composable("screen2") { HomeScreen(navController) }
         composable("screen3") { LabTest(navController) }
-        composable(
+
+composable(
             "screen4/{id}",
             arguments = listOf(navArgument("id") { type = NavType.StringType })
         ) { backStackEntry ->
             UserDetails(navController,backStackEntry.arguments?.getString("id")!!)
         }
+        composable(
+            "userdetail",
+//            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) {
+            UserDetails2(navController)
+        }
+        composable(
+            "addressdetail",
+//            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) {
+            AddressDetails(navController)
+        }
+//        ,backStackEntry.arguments?.getString("id")!!
         composable(
             "screen5/{fetchData}",
             arguments = listOf(

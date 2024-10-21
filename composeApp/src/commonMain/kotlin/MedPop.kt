@@ -149,7 +149,7 @@ fun MedPop(
         confirmButton = {
             Button(
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Blue,
+                    backgroundColor = AppColors.SoftPurple,
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(10.dp),

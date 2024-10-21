@@ -69,6 +69,7 @@ fun Navigation(viewModel: ImagePickerViewModel) {
                 val imageUri = backStackEntry.arguments?.getString("imageUri")
                 ImageDisplayScreen(navController, imageUri)
             }
+        composable("logout") { LogOutScreen(navController) }
         }
     }
 

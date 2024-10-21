@@ -1,3 +1,4 @@
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -96,19 +98,24 @@ fun MedPop(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        "Upload Your Image",
+                        "Upload Your Prescription",
                         modifier = Modifier.align(Alignment.CenterVertically),
                         fontWeight = FontWeight.Bold
                     )
-
                     if (isImagepicked) {
+                        Text("${viewModel.imageData.value?.imageName}")
                         Icon(
-                            imageVector = Icons.Default.CheckCircle,
-                            contentDescription = "Uploaded",
-                            tint = Color.Green,
+                            imageVector = Icons.Filled.Edit,
+                            contentDescription = "${viewModel.imageData.value}",
+                            tint = Color.Red,
                             modifier = Modifier.size(30.dp)
+                                .clickable {
+                                    viewModel.resetImagePicked()
+                                    navController.navigate("imagepicker")
+                                }
                         )
                     } else {
+
                         Button(
                             modifier = Modifier.wrapContentSize(),
                             onClick = {

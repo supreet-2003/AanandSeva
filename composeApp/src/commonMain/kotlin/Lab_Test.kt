@@ -160,7 +160,7 @@ fun LabTest(navController: NavHostController) {
                         contentDescription = null,
                         tint = Color.Gray,
                         modifier = Modifier.size(40.dp).clickable(onClick = {
-                            navController.navigate("screen4")
+                            navController.navigate("logout")
 
                         })
                     )

@@ -167,7 +167,7 @@ fun HomeScreen(navController: NavHostController) {
                         imageVector = Icons.Outlined.Person,
                         contentDescription = null,
                         modifier = Modifier.size(40.dp).clickable(onClick = {
-                            // Handle navigation or state change
+                            navController.navigate("logout")
                         }),
                         tint = Color.Gray
                     )

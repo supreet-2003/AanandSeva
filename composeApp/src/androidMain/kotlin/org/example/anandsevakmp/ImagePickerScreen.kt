@@ -29,9 +29,10 @@ actual fun ImagePickerScreen(navController: NavController, viewModel: ImagePicke
             coroutineScope.launch {
                 // Retrieve the file path from the URI
                 val imagePath = getImageFilePathFromUri(context, uri)
+                 val imageName = getImageNameFromUri(context, uri)
                 if (imagePath != null) {
                     // Update ViewModel with the file path and the picked image URI
-                    viewModel.setImagePicked(true, imagePath)
+                    viewModel.setImagePicked(true, imagePath, imageName)
                 }
                 // Navigate back to the previous screen
                 navController.popBackStack()
@@ -54,6 +55,19 @@ suspend fun getImageFilePathFromUri(context: android.content.Context, uri: Uri):
     val cursor = context.contentResolver.query(uri, projection, null, null, null)
     cursor?.use {
         val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        if (it.moveToFirst()) {
+            return it.getString(columnIndex)
+        }
+    }
+    return null
+}
+
+// Utility function to retrieve the image name from a URI
+suspend fun getImageNameFromUri(context: android.content.Context, uri: Uri): String? {
+    val projection = arrayOf(MediaStore.Images.Media.DISPLAY_NAME)
+    val cursor = context.contentResolver.query(uri, projection, null, null, null)
+    cursor?.use {
+        val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
         if (it.moveToFirst()) {
             return it.getString(columnIndex)
         }

@@ -6,7 +6,8 @@ import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 data class ImageData(
     val imagePath: String?,  // Stores the file path of the picked image
-    val imageDescription: String = ""
+    val imageDescription: String = "",
+    val imageName: String? = ""
 )
 
 class ImagePickerViewModel : ViewModel() {
@@ -23,9 +24,9 @@ class ImagePickerViewModel : ViewModel() {
     val textInput: StateFlow<String> get() = _textInput
 
     // Function to update the image picked status and image data
-    fun setImagePicked(isPicked: Boolean, imagePath: String?) {
+    fun setImagePicked(isPicked: Boolean, imagePath: String?, imageName: String?) {
         _isImagePicked.value = isPicked
-        _imageData.value = ImageData(imagePath = imagePath)  // imagePath is set here
+        _imageData.value = ImageData(imagePath = imagePath, imageName = imageName)  // imagePath is set here
     }
 
     // Function to update the text input state

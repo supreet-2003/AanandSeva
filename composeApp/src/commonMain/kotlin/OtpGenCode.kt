@@ -190,7 +190,9 @@ fun OtpBox(
             .background(AppColors.Background),
         textStyle = TextStyle(
             fontSize = 24.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+//            color = Color.Black
         ),
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

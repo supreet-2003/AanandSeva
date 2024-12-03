@@ -71,11 +71,8 @@ fun LabTest(navController: NavHostController) {
             background = AppColors.OffWhite
         )
     ) {
-
-
         var showDialog1 by remember { mutableStateOf(false) }
         val searchText = remember { mutableStateOf(TextFieldValue("")) }
-
 
         Scaffold(
             topBar = {
@@ -84,140 +81,43 @@ fun LabTest(navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth().height(120.dp),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-
-                        Image(
-                            painterResource(Res.drawable.logo),
-                            contentDescription = null,
-                            modifier = Modifier.padding(
-                                top = 5.dp,
-                                start = 10.dp,
-                                end = 10.dp
-                            )
-                        )
-                        Text(
-                            text = "AanandSeva",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 25.sp,
-                            modifier = Modifier.padding(5.dp)
-                                .align(Alignment.CenterVertically)
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Icon(
-                            imageVector = Icons.Outlined.ShoppingCart,
-                            contentDescription = null,
-                            modifier = Modifier.size(50.dp).padding(vertical = 5.dp)
-                                .clickable(
-                                    onClick = {
-                                        navController.navigate("screen5/true")
-
-                                    }
-                                )
-                        )
-
-                    }
-
-                    Text(
-                        "Upload Your Lab Tests",
-                        modifier = Modifier.align(Alignment.CenterHorizontally).padding(8.dp),
-                        style = TextStyle(
-                            color = Color.Black,
-                            fontWeight = FontWeight.Bold,
-                            shadow = Shadow(
-                                color = Color.Black,
-                                blurRadius = 3f
-                            )
-                        ),
-                        fontSize = 30.sp
-                    )
+                    TopBar()
                 }
             },
-            bottomBar = {
-                val selectedTab = remember { mutableStateOf("lab") }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(AppColors.OffWhite)
-                        .padding(8.dp)
-                        .padding(horizontal = 8.dp)
-                        .height(50.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    BottomBarIcon1(
-                        painterResource(Res.drawable.home_logo),
-                        "home",
-                        selectedTab.value == "home",
-                        onClick = {
-                            selectedTab.value = "home"
-                            navController.navigate("screen2")
-                        }
-                    )
-                    BottomBarIcon1(
-                        painterResource(Res.drawable.order_logo),
-                        "orders",
-                        selectedTab.value == "orders",
-                        onClick = {
-                            selectedTab.value = "orders"
-                            navController.navigate("screen5/true")
-                        }
-                    )
-                    BottomBarIcon1(
-                        painterResource(Res.drawable.lab_logo),
-                        "lab",
-                        selectedTab.value == "lab",
-                        onClick = {
-                            selectedTab.value = "lab"
-                            navController.navigate("screen3")
-                        }
-                    )
-                   BottomBarIcon1(
-                        painterResource(Res.drawable.profile_logo),
-                        "profile",
-                        selectedTab.value == "profile",
-                        onClick = {
-                            selectedTab.value = "profile"
-                            navController.navigate("logout")
-                        }
-                    )
-                }
-
-            },
+            bottomBar = { BottomNav(navController,"lab") },
             floatingActionButton = {
-
-                FloatingActionButton(
-
-                    onClick = {
-//                            if (showDialog1) {
-//                                LabPop(onDismiss = {showDialog1=false})
-//                            }
-                         showDialog1 = true
-                    },
-                    backgroundColor = AppColors.Background
-                ) {
-                    Icon(Icons.Filled.AddCircle, contentDescription = "Add")
+                if(userType == "User" && loading.value == false){
+                            FloatingActionButton(
+                                onClick = {
+                                    navController.navigate("labtestpop")
+                                },
+                                backgroundColor = AppColors.Background,
+                            ) {
+                                Icon(Icons.Filled.AddCircle, contentDescription = "Add")
+                            }
                 }
             },
             floatingActionButtonPosition = FabPosition.End
         ) { paddingValues ->
-            if (showDialog1) {
-                LabPop(onDismiss = { showDialog1 = false },
-                    onUploadClick = {
-                        navController.navigate("imagepicker")
-                        showDialog1 = false // Optionally close the dialog
-                    })
-            }
+            Text(
+                "Upload Your Lab Tests",
+                modifier = Modifier.padding(8.dp),
+                style = TextStyle(
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    shadow = Shadow(
+                        color = Color.Black,
+                        blurRadius = 3f
+                    )
+                ),
+                fontSize = 30.sp
+            )
             Column(
                 modifier = Modifier.padding(paddingValues),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-
                 LabList()
             }
-
         }
     }
 }

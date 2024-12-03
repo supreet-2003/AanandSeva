@@ -46,6 +46,7 @@ data class Order (
     val file: orderFile,
     var imageStorageLink: String,
     var comments : Array<comments>,
+    var tests: Array<String>,
     val orderedBy: String,
     val orderedOn: String,
     val orderType: String,
@@ -185,10 +186,10 @@ class ApiClient {
         }
     }
 
-    suspend fun fetchMedicineOrders(): List<Order>? {
+    suspend fun fetchOrders(orderType: String?): List<Order>? {
         println("---name, type $userName -----$userType")
         return try {
-            val response: HttpResponse = client.get(url = Url("http://$ip:4000/orders/$userName/$userType"))
+            val response: HttpResponse = client.get(url = Url("http://$ip:4000/orders/$userName/$userType/$orderType"))
             if (response.status == HttpStatusCode.OK) {
                 val responseBody = response.bodyAsText()
                 val gson = Gson()

@@ -19,7 +19,7 @@ fun Navigation(viewModel: ImagePickerViewModel) {
     val launchScreen: String = if(token === "" || id == "" || userName == "")
         "screen1"
     else
-        "screen2"
+        "screen3"
     println("launch screen---$launchScreen")
     NavHost(navController = navController, startDestination = launchScreen) {
         composable("screen1") { App(navController) }
@@ -67,12 +67,24 @@ composable(
         }
         composable("medpop") {MedPop(
             navController = navController,
-            onDismiss = { navController.popBackStack() },
+            onDismiss = { navController.popBackStack()
+                viewModel.resetImagePicked()
+                        },
             onUploadClick = {
                 // Handle upload action here if necessary
             },
             onOrderClick = {
                 // Handle order action here if necessary
+            },
+            viewModel = viewModel
+        )}
+        composable("labtestpop") {BookLabTest(
+            navController = navController,
+            onDismiss = { navController.popBackStack()
+                viewModel.resetImagePicked()
+                        },
+            onUploadClick = {
+                // Handle upload action here if necessary
             },
             viewModel = viewModel
         )}

@@ -122,22 +122,24 @@ suspend fun processOrders(orders: List<Order>?, driveService: Drive) {
 
     if (orders != null) {
         for (order in orders) {
-            val fileName = order.file.fileName
-            val fileId = extractFileIdFromUrl(order.file.url)
-            val check = isImageInCache("$fileId.jpg", cacheDir)
-            // Check if image is already in cache
-            if (!check) {
-                // If not, download the image from Google Drive
-                val downloadedFile = downloadImageToCache(driveService, fileId, cacheDir)
-                if (downloadedFile != null) {
-                    println("Image downloaded and saved to cache: ${downloadedFile.absolutePath}")
-                    order.imageStorageLink = downloadedFile.absolutePath
+            if(order.file != null){
+                val fileName = order.file.fileName
+                val fileId = extractFileIdFromUrl(order.file.url)
+                val check = isImageInCache("$fileId.jpg", cacheDir)
+                // Check if image is already in cache
+                if (!check) {
+                    // If not, download the image from Google Drive
+                    val downloadedFile = downloadImageToCache(driveService, fileId, cacheDir)
+                    if (downloadedFile != null) {
+                        println("Image downloaded and saved to cache: ${downloadedFile.absolutePath}")
+                        order.imageStorageLink = downloadedFile.absolutePath
+                    } else {
+                        println("Failed to download image for order: ${order._id}")
+                    }
                 } else {
-                    println("Failed to download image for order: ${order._id}")
+                    println("Image already exists in cache: $fileName")
+                    order.imageStorageLink = "$cacheDir/$fileId.jpg"
                 }
-            } else {
-                println("Image already exists in cache: $fileName")
-                order.imageStorageLink = "$cacheDir/$fileId.jpg"
             }
         }
     }

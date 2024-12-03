@@ -156,6 +156,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.play.services.cast.framework)
     implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.foundation.android)
 }
 
 //dependencies {

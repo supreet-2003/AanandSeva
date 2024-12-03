@@ -88,28 +88,7 @@ fun HomeScreen(navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.SpaceAround
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Image(
-                            painter = painterResource(Res.drawable.logo),
-                            contentDescription = null,
-                            modifier = Modifier.padding(top = 5.dp, start = 10.dp, end = 10.dp)
-                        )
-                        Text(
-                            text = "AanandSeva",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 25.sp,
-                            modifier = Modifier.padding(5.dp).align(Alignment.CenterVertically)
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Icon(
-                            imageVector = Icons.Outlined.Notifications,
-                            contentDescription = null,
-                            modifier = Modifier.size(50.dp).padding(vertical = 5.dp)
-                        )
-                    }
+                        TopBar()
 
                     OutlinedTextField(
                         modifier = Modifier
@@ -139,58 +118,7 @@ fun HomeScreen(navController: NavHostController) {
                     )
                 }
             },
-            bottomBar = {
-                val selectedTab = remember { mutableStateOf("home") }
-
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(AppColors.OffWhite)
-                        .padding(8.dp)
-                        .padding(horizontal = 8.dp)
-                        .height(50.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    BottomBarIcon1(
-                        painterResource(Res.drawable.home_logo),
-                        "home",
-                        selectedTab.value == "home",
-                        onClick = {
-                            selectedTab.value = "home"
-                            navController.navigate("screen2")
-                        }
-                    )
-                    BottomBarIcon1(
-                        painterResource(Res.drawable.order_logo),
-                        "orders",
-                        selectedTab.value == "orders",
-                        onClick = {
-                            selectedTab.value = "orders"
-                            navController.navigate("screen5/true")
-                        }
-                    )
-                    BottomBarIcon1(
-                        painterResource(Res.drawable.lab_logo),
-                        "lab",
-                        selectedTab.value == "lab",
-                        onClick = {
-                            selectedTab.value = "lab"
-                            navController.navigate("screen3")
-                        }
-                    )
-                   BottomBarIcon1(
-                        painterResource(Res.drawable.profile_logo),
-                        "profile",
-                        selectedTab.value == "profile",
-                        onClick = {
-                            selectedTab.value = "profile"
-                            navController.navigate("logout")
-                        }
-                    )
-                }
-            }
+            bottomBar = { BottomNav(navController, "home") }
         ) {
           if(loading.value){
               LoadingScreen()

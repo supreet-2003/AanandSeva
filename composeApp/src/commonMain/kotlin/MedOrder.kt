@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -40,8 +43,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import org.example.anandsevakmp.ImageDisplayScreen
-import androidx.compose.runtime.*
-import androidx.compose.ui.unit.dp
 
 suspend fun updateOrderStatus(apiClient: ApiClient, order: Order, value: String): Any? {
     return try {
@@ -75,6 +76,7 @@ fun MedOrder(index:Int,order: Order,navController: NavController) {
     val apiClient = remember { ApiClient() }
     val coroutineScope = rememberCoroutineScope()
 
+
      Box(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -85,103 +87,115 @@ fun MedOrder(index:Int,order: Order,navController: NavController) {
 
             Column(modifier = Modifier
                 .padding(8.dp)
-                .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceBetween
+                .fillMaxHeight()
                 ) {
-                Column{
-                Button(
-                    onClick = {
-                        if (userType == "Compounder") {
-                            dropdown = true
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = when (selectedStatus) {
-                            "Cancelled" -> Color(0xFFC7253E)
-                            "Completed" -> Color(0xFF00712D)
-                            else -> AppColors.SoftPurple
-                        },
-                        contentColor = Color.White
-
-                    ),
-                    shape = RoundedCornerShape(10.dp),
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.TopEnd // Align the button and dropdown to the right
                 ) {
-                    Text(text = selectedStatus)
-                }
-
-                DropdownMenu(
-                    modifier = Modifier
-                        .width(150.dp),
-                    expanded = dropdown,
-                    onDismissRequest = { dropdown = false }
-                ) {
-                    options.forEach { option ->
-                        DropdownMenuItem(
+                    Column {
+                        Button(
                             onClick = {
-                                order.orderStatus = option
-                                selectedStatus = option
-                                selectedOption = option
-                                coroutineScope.launch { updateOrderStatus(apiClient,order,"status") }
-                                dropdown = false
+                                if (userType == "Compounder") {
+                                    dropdown = true
+                                }
                             },
-                            text = { Text(option) }
-                        )
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = when (selectedStatus) {
+                                    "Cancelled" -> Color(0xFFC7253E)
+                                    "Completed" -> Color(0xFF00712D)
+                                    else -> AppColors.SoftPurple
+                                },
+                                contentColor = Color.White
+                            ),
+                            shape = RoundedCornerShape(10.dp),
+                        ) {
+                            Text(text = selectedStatus)
+                        }
+
+                        // DropdownMenu positioned below the button
+                        DropdownMenu(
+                            modifier = Modifier.width(150.dp),
+                            expanded = dropdown,
+                            onDismissRequest = { dropdown = false },
+                            offset = androidx.compose.ui.unit.DpOffset(x = 0.dp, y = 4.dp) // Small offset to place dropdown below button
+                        ) {
+                            options.forEach { option ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        order.orderStatus = option
+                                        selectedStatus = option
+                                        selectedOption = option
+                                        coroutineScope.launch {
+                                            updateOrderStatus(apiClient, order, "status")
+                                        }
+                                        dropdown = false
+                                    },
+                                    text = { Text(option) }
+                                )
+                            }
+                        }
                     }
                 }
+
+                Row {
+                    ImageDisplayScreen(navController = null, imageUri = order.imageStorageLink)
+                    Text("Ordered On: ${order.orderedOn}")
+                }
+
                 if(userType == "Compounder") {
                     Text("Ordered By: ${order.orderedBy}")
                 }
-            }
-                ImageDisplayScreen(navController = null, imageUri = order.imageStorageLink)
-                Column {
-                    //Comment Bar
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        commentList.forEach { comment ->
-                            Text(text = "${comment.commentedBy}: ${comment.text}")
-                            Spacer(modifier = Modifier.height(8.dp))  // Space between comments
-                        }
-                    }
 
-                    //Comment Adding Bar
-                    val searchText = remember { mutableStateOf(TextFieldValue("")) }
-                    androidx.compose.material.OutlinedTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                        value = searchText.value,
-                        onValueChange = { newValue ->
-                            searchText.value = newValue
-                        },
-                        shape = RoundedCornerShape(15.dp),
-                        label = { Text("Send Comments") },
-                        trailingIcon = {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.Send,
-                                contentDescription = "Send Button",
-                                modifier = Modifier.clickable {
-                                    if (searchText.value.text.isNotBlank()) {
-                                        // Update the list of comments with the new comment
-                                        val commentData = comments(
-                                            text = searchText.value.text,
-                                            date = "",
-                                            commentedBy = userName
-                                        )
-                                        order.comments = order.comments.plusElement(commentData)
-                                        commentList = commentList.plusElement(commentData)
-                                        coroutineScope.launch { addOrderComment(apiClient,order,commentData) }
-                                        searchText.value =
-                                            TextFieldValue("") // Clear the input field after sending
-                                    }
-                                }
-                            )
-                        },
-
-                        )
-                }
+//                Column {
+//                    //Comment Bar
+//                    Column(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(16.dp)
+//                    ) {
+//                        commentList.forEach { comment ->
+//                            Text(text = "${comment.commentedBy}: ${comment.text}")
+//                            Spacer(modifier = Modifier.height(8.dp))  // Space between comments
+//                        }
+//                    }
+//
+//                    //Comment Adding Bar
+//                    val searchText = remember { mutableStateOf(TextFieldValue("")) }
+//                    androidx.compose.material.OutlinedTextField(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+//                        value = searchText.value,
+//                        onValueChange = { newValue ->
+//                            searchText.value = newValue
+//                        },
+//                        shape = RoundedCornerShape(15.dp),
+//                        label = { Text("Send Comments") },
+//                        trailingIcon = {
+//                            Icon(
+//                                imageVector = Icons.AutoMirrored.Filled.Send,
+//                                contentDescription = "Send Button",
+//                                modifier = Modifier.clickable {
+//                                    if (searchText.value.text.isNotBlank()) {
+//                                        // Update the list of comments with the new comment
+//                                        val commentData = comments(
+//                                            text = searchText.value.text,
+//                                            date = "",
+//                                            commentedBy = userName
+//                                        )
+//                                        order.comments = order.comments.plusElement(commentData)
+//                                        commentList = commentList.plusElement(commentData)
+//                                        coroutineScope.launch { addOrderComment(apiClient,order,commentData) }
+//                                        searchText.value =
+//                                            TextFieldValue("") // Clear the input field after sending
+//                                    }
+//                                }
+//                            )
+//                        },
+//
+//                        )
+//                }
             }
             }
         }
@@ -207,8 +221,21 @@ fun MedList(orderData: List<Order>?){
             val pagerState = rememberPagerState(pageCount = {
                 orderData?.size ?: 0
             })
-            HorizontalPager(state = pagerState) { page ->
-                orderData?.get(page)?.let { MedOrder(page, it,  navController = navController) }
+//            VerticalPager(state = pagerState) { page ->
+//                orderData?.get(page)?.let { MedOrder(page, it,  navController = navController) }
+//            }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(orderData ?: listOf()) { order ->
+                    Box(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                    ) {
+                        MedOrder(orderData.indexOf(order), order, navController = navController)
+                    }
+                }
             }
         }
     }

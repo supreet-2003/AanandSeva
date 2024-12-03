@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 //import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,10 +27,9 @@ import coil.request.ImageRequest
 actual fun  ImageDisplayScreen(navController: NavController?, imageUri: String?) {
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(230.dp)
+            .height(180.dp)
+            .width(160.dp)
             .clip(RoundedCornerShape(6.dp))
-
     ) {
         if (imageUri != null) {
             val decodedUri = Uri.decode(imageUri)

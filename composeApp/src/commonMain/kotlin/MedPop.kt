@@ -14,6 +14,8 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.OutlinedTextField
@@ -67,10 +69,15 @@ fun MedPop(
                         val name = it.id
                         try {
                             runBlocking {
-                                val json =
-                                    """{"file": { "fileName": "$name", "url": "$link"}, "comments": {"text":"$text","date":"","commentedBy":"$userName"}, "orderedBy": "$userName", "orderedOn": "", "orderType": "medicine", "orderStatus": "Ordered"}"""
+                                var json = ""
+                                if(text != "")
+                                    json =
+                                        """{"file": { "fileName": "$name", "url": "$link"}, "comments": {"text":"$text","date":"","commentedBy":"$userName"}, "orderedBy": "$userName", "orderedOn": "", "orderType": "medicine", "orderStatus": "Ordered"}"""
+                                else
+                                    json =
+                                    """{"file": { "fileName": "$name", "url": "$link"},"orderedBy": "$userName", "orderedOn": "", "orderType": "medicine", "orderStatus": "Ordered"}"""
                                 val response = listOf(apiClient.saveOrder(json))
-                                _medicineOrders.value = fetchMedicineOrders(apiClient)
+                                _medicineOrders.value = fetchOrders(apiClient,"medicine")
                             }
                             loading.value = false
                             refreshData.value = "true"
@@ -81,6 +88,16 @@ fun MedPop(
                     } ?: println("File upload failed!")
 
                 }
+            } else {
+                runBlocking {
+                    val json =
+                        """{"comments": {"text":"$text","date":"","commentedBy":"$userName"}, "orderedBy": "$userName", "orderedOn": "", "orderType": "medicine", "orderStatus": "Ordered"}"""
+                    val response = listOf(apiClient.saveOrder(json))
+                    _medicineOrders.value = fetchOrders(apiClient,"medicine")
+                }
+                loading.value = false
+                refreshData.value = "true"
+                viewModel.resetImagePicked()
             }
         }
     }
@@ -107,12 +124,21 @@ fun MedPop(
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             contentDescription = "${viewModel.imageData.value}",
-                            tint = Color.Red,
+                            tint = Color.Blue,
                             modifier = Modifier.size(30.dp)
                                 .clickable {
                                     viewModel.resetImagePicked()
                                     navController.navigate("imagepicker")
                                 }
+                        )
+                        Icon(
+                                imageVector = Icons.Filled.Close,
+                        contentDescription = "${viewModel.imageData.value}",
+                        tint = Color.Red,
+                        modifier = Modifier.size(30.dp)
+                            .clickable {
+                                viewModel.resetImagePicked()
+                            }
                         )
                     } else {
 

@@ -57,11 +57,11 @@
     import kotlinx.coroutines.launch
     import kotlinx.coroutines.runBlocking
 
-    suspend fun fetchMedicineOrders(apiClient: ApiClient): List<Order>? {
+    suspend fun fetchOrders(apiClient: ApiClient, type: String): List<Order>? {
         return try {
             var response : List<Order>? = listOf()
            
-                response = apiClient.fetchMedicineOrders()
+                response = apiClient.fetchOrders(type)
                 processOrders(response, driveService)
             
             println("resss$response")
@@ -85,10 +85,8 @@
             coroutineScope.launch {
                 refreshData.value = fetchData
                 if(fetchData !== "false"){
-                   
-                        loading.value = true
-                        _medicineOrders.value = fetchMedicineOrders(apiClient)
-                    
+                    loading.value = true
+                    _medicineOrders.value = fetchOrders(apiClient,"medicine")
                     loading.value = false
                 }
             }
@@ -102,30 +100,7 @@
             Surface(color = MaterialTheme.colors.background) {
 
                 Scaffold(
-                    topBar = {
-                        TopAppBar(
-                            title = { Text("AanandSeva", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
-                            navigationIcon = {
-                                Icon(
-                                    imageVector = Icons.Outlined.Home,
-                                    contentDescription = "Back",
-                                    modifier = Modifier.clickable {
-                                        navController.navigate("screen2")
-                                    }
-                                )
-                            },
-                            actions = {
-                                Icon(
-                                    imageVector = Icons.Outlined.ShoppingCart,
-                                    contentDescription = "Cart",
-                                    modifier = Modifier.padding(end = 16.dp).clickable {
-                                        navController.navigate("screen5/true")
-                                    }
-                                )
-                            },
-                            backgroundColor = Color.White,
-                            elevation = 4.dp
-                        )
+                    topBar = {TopBar()
                     }, bottomBar = {
                         val selectedTab = remember { mutableStateOf("orders") }
 
